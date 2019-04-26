@@ -6,7 +6,7 @@ Class {
 		'startDate',
 		'endDate'
 	],
-	#category : #'OKR-Model'
+	#category : #'OKR-Model-Core'
 }
 
 { #category : #'Instance creation' }
