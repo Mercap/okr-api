@@ -13,6 +13,9 @@ ManifestOKRModel class >> initialize [
 	<ignoreForCoverage>
 	Kepler
 		registerInterfaceAt: #PeriodManagementSystem
-		named: 'System to manage periods'
-		declaring: #(#periods #startManagingPeriod:)
+			named: 'System to manage periods'
+			declaring: #(#periods #startManagingPeriod:);
+		registerInterfaceAt: #KeyResultManagementSystem
+			named: 'System to manage key results'
+			declaring: #(#keyResults #startManagingKeyResult:)
 ]
