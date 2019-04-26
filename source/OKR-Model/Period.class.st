@@ -10,20 +10,25 @@ Class {
 }
 
 { #category : #'Instance creation' }
-Period class >> named: aName from: aStartDate to: anEndDate [ 
-	^ self new initializeNamed: aName from: aStartDate to: anEndDate; yourself
+Period class >> named: aName from: aStartDate to: anEndDate [
+
+	^ self new
+		initializeNamed: aName from: aStartDate to: anEndDate;
+		yourself
 ]
 
 { #category : #accessing }
 Period >> endDate [
+
 	^ endDate
 ]
 
 { #category : #initialization }
-Period >> initializeNamed: aName from: aStartDate to: anEndDate [ 
+Period >> initializeNamed: aName from: aStartDate to: anEndDate [
+
 	name := aName.
 	startDate := aStartDate.
-	endDate := anEndDate.
+	endDate := anEndDate
 ]
 
 { #category : #accessing }
@@ -33,5 +38,6 @@ Period >> name [
 
 { #category : #accessing }
 Period >> startDate [
+
 	^ startDate
 ]
