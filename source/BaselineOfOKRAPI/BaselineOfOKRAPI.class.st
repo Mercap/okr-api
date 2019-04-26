@@ -44,6 +44,6 @@ BaselineOfOKRAPI >> setUpDependencies: spec [
 		baseline: 'Chalten'
 			with: [ spec
 				repository: 'github://ba-st/Chalten:v8/source';
-				loads: #('Deployment') ];
+				loads: #('Chalten-Gregorian-Calendar') ];
 		import: 'Chalten'.
 ]
