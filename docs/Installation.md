@@ -5,7 +5,7 @@
 You can load **okr-api** evaluating:
 ```smalltalk
 Metacello new
-	baseline: 'okrapi';
+	baseline: 'OKRAPI';
 	repository: 'github://Mercap/okr-api:release-candidate/source';
 	load.
 ```
@@ -19,7 +19,7 @@ In order to include **okr-api** as part of your project, you should reference th
 setUpDependencies: spec
 
 	spec
-		baseline: 'okrapi'
+		baseline: 'OKRAPI'
 			with: [ spec
 				repository: 'github://Mercap/okr-api:v{XX}/source';
 				loads: #('Deployment') ];
@@ -34,7 +34,7 @@ baseline: spec
 	spec
 		for: #common
 		do: [ self setUpDependencies: spec.
-			spec package: 'My-Package' with: [ spec requires: #('okrapi') ] ]
+			spec package: 'My-Package' with: [ spec requires: #('OKRAPI') ] ]
 ```
 
 ## Provided groups
