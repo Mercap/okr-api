@@ -1,7 +1,7 @@
 Class {
 	#name : #PeriodTest,
 	#superclass : #TestCase,
-	#category : #'OKR-Tests'
+	#category : #'OKR-Tests-Core'
 }
 
 { #category : #Testing }

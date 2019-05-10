@@ -16,7 +16,7 @@ PeriodRESTfulController class >> within: aPeriodManagementSystem [
 { #category : #'private - accessing' }
 PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 
-	^ ZnETag with: ( SHA1 new hashMessage: aPeriod printString ) hex
+	^ ZnETag with: ( MD5 new hashMessage: aPeriod printString ) hex
 ]
 
 { #category : #accessing }
@@ -35,7 +35,17 @@ PeriodRESTfulController >> initializeWithin: aPeriodManagementSystem [
 	periodManagementSystem := aPeriodManagementSystem.
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
+PeriodRESTfulController >> locationOf: aPeriod [
+
+	| baseUrl |
+
+	baseUrl := ( baseUrlOptional withContentDo: [ :theBaseUrl | theBaseUrl ] ifUnused: [ '' ] ) asZnUrl.
+
+	^ baseUrl / self specification endpoint / aPeriod uuid printString asZnUrl
+]
+
+{ #category : #'private - accessing' }
 PeriodRESTfulController >> periodManagementSystem [
 	
 	^ periodManagementSystem 
@@ -43,8 +53,8 @@ PeriodRESTfulController >> periodManagementSystem [
 
 { #category : #'private - accessing' }
 PeriodRESTfulController >> provideHypermediaPolicy [
-	
-	^ NonHypermediaDrivenRESTfulControllerPolicy new
+
+	^ HypermediaDrivenRESTfulControllerPolicy for: self
 ]
 
 { #category : #'private - accessing' }

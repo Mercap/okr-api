@@ -1,7 +1,7 @@
 Class {
 	#name : #KeyResultManagementSystemUserStory,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : #'OKR-Tests'
+	#category : #'OKR-Tests-Core'
 }
 
 { #category : #accessing }

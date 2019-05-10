@@ -4,7 +4,7 @@ A KeyResultTest is a test class for testing the behavior of KeyResult
 Class {
 	#name : #KeyResultTest,
 	#superclass : #TestCase,
-	#category : #'OKR-Tests'
+	#category : #'OKR-Tests-Core'
 }
 
 { #category : #tests }

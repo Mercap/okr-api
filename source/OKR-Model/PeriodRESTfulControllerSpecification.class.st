@@ -4,17 +4,22 @@ Class {
 	#category : #'OKR-Model-API'
 }
 
-{ #category : #adding }
+{ #category : #encoding }
 PeriodRESTfulControllerSpecification >> addJsonEncoderMappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: self periodsMappingKey
-		to: self periodsMediaType
+		to: self periodsVersion1dot0dot0MediaType
 		using: [ :periods :context | 
 			String
 				streamContents: [ :stream | 
 					( NeoJSONWriter on: stream )
-						for: Period do: [ :mapping | mapping mapInstVars ];
+						for: Period
+							do: [ :mapping | 
+							mapping
+								mapAccessors: #(#name #startDate #endDate);
+								mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ]
+							];
 						for: FixedDate customDo: [ :mapping | mapping encoder: #printString ];
 						nextPut: periods
 					]
@@ -36,13 +41,14 @@ PeriodRESTfulControllerSpecification >> getPeriodsRoute [
 		evaluating: [ :service :httpRequest :context | service getPeriodsBasedOn: httpRequest within: context ]
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 PeriodRESTfulControllerSpecification >> periodsMappingKey [
-	^'periods'
+
+	^ 'periods'
 ]
 
-{ #category : #adding }
-PeriodRESTfulControllerSpecification >> periodsMediaType [
+{ #category : #accessing }
+PeriodRESTfulControllerSpecification >> periodsVersion1dot0dot0MediaType [
 
-	^ 'application/vnd.mercap.periods+json' asMediaType 
+	^ 'application/vnd.mercap.periods+json;version=1.0.0' asMediaType
 ]
