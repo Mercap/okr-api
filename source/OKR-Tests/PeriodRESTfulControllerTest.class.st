@@ -13,16 +13,22 @@ PeriodRESTfulControllerTest >> baseUrl [
 	^ 'https://api.mercap.net' asZnUrl
 ]
 
-{ #category : #'private - accessing' }
-PeriodRESTfulControllerTest >> period2019Q1 [
+{ #category : #'private - support' }
+PeriodRESTfulControllerTest >> defaultPeriodMediaType [
 
-	^ Period named: '2019Q1' from: March first , 2019 to: ( May , 2019 ) lastDate
+	^ resourceController specification periodVersion1dot0dot0MediaType
 ]
 
 { #category : #'private - support' }
 PeriodRESTfulControllerTest >> registerPeriod: aPeriod [
 
 	periodManagementSystem startManagingPeriod: aPeriod
+]
+
+{ #category : #'private -  support' }
+PeriodRESTfulControllerTest >> requestToCreatePeriodFrom: aJSON [
+
+	^ self requestToPOST: aJSON as: self defaultPeriodMediaType
 ]
 
 { #category : #'private - accessing' }
@@ -50,11 +56,35 @@ PeriodRESTfulControllerTest >> setUpResourceController [
 ]
 
 { #category : #tests }
+PeriodRESTfulControllerTest >> testCreatePeriod [
+
+	| response |
+
+	self assert: periodManagementSystem periods isEmpty.
+	response := resourceController
+		createPeriodBasedOn:
+			( self
+				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+		within: self newHttpRequestContext.
+
+	self
+		assert: response isCreated;
+		withTheOnlyOneIn: periodManagementSystem periods
+			do: [ :foundPeriod | 
+			self
+				assert: response location equals: ( self urlOf: foundPeriod );
+				assert: foundPeriod name equals: '2018Q4';
+				assert: foundPeriod startDate equals: October first , 2018;
+				assert: foundPeriod endDate equals: December lastDayOfMonth , 2018
+			]
+]
+
+{ #category : #tests }
 PeriodRESTfulControllerTest >> testGetPeriodsWithOnlyOneManaged [
 
 	| response period |
 
-	period := self period2019Q1.
+	period := Period named: '2019Q1' from: March first , 2019 to: ( May , 2019 ) lastDate.
 	self registerPeriod: period.
 
 	response := resourceController
@@ -65,7 +95,7 @@ PeriodRESTfulControllerTest >> testGetPeriodsWithOnlyOneManaged [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType asMediaType
-			equals: resourceController specification periodsVersion1dot0dot0MediaType.
+			equals: resourceController specification periodPluralVersion1dot0dot0MediaType.
 
 	self
 		withJsonFromContentsIn: response
@@ -75,8 +105,8 @@ PeriodRESTfulControllerTest >> testGetPeriodsWithOnlyOneManaged [
 				do: [ :foundPeriod | 
 					self
 						assert: foundPeriod name equals: period name asString;
-						assert: foundPeriod startDate equals: period startDate asString;
-						assert: foundPeriod endDate equals: period endDate asString;
+						assert: foundPeriod startDate equals: '2019-03-01';
+						assert: foundPeriod endDate equals: '2019-05-31';
 						assert: ( foundPeriod links at: #self ) equals: ( self urlOf: period )
 					]
 			]
@@ -95,7 +125,7 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType asMediaType
-			equals: resourceController specification periodsVersion1dot0dot0MediaType.
+			equals: resourceController specification periodPluralVersion1dot0dot0MediaType.
 
 	self withJsonFromContentsIn: response do: [ :periods | self assert: periods isEmpty ]
 ]
