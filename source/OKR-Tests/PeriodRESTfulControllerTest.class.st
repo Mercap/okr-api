@@ -10,7 +10,7 @@ Class {
 { #category : #'private - support' }
 PeriodRESTfulControllerTest >> baseUrl [
 
-	^ 'https://api.mercap.net' asZnUrl 
+	^ 'https://api.mercap.net' asZnUrl
 ]
 
 { #category : #'private - accessing' }
@@ -20,8 +20,8 @@ PeriodRESTfulControllerTest >> period2019Q1 [
 ]
 
 { #category : #'private - support' }
-PeriodRESTfulControllerTest >> registerPeriod: aPeriod [ 
-	
+PeriodRESTfulControllerTest >> registerPeriod: aPeriod [
+
 	periodManagementSystem startManagingPeriod: aPeriod
 ]
 
@@ -30,14 +30,14 @@ PeriodRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest get: aUrl)
+			( ( ZnRequest get: aUrl )
 				setAccept: anAcceptHeader;
-				yourself)
+				yourself )
 ]
 
 { #category : #'private - accessing' }
-PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [ 
-	
+PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [
+
 	^ self requestToGet: self resourceUrl accepting: anAcceptHeader
 ]
 
@@ -45,7 +45,7 @@ PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [
 PeriodRESTfulControllerTest >> setUpResourceController [
 
 	periodManagementSystem := PeriodManagementSystem new.
-	
+
 	resourceController := PeriodRESTfulController within: periodManagementSystem
 ]
 
@@ -101,7 +101,7 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 ]
 
 { #category : #'private - accessing' }
-PeriodRESTfulControllerTest >> urlOf: aPeriod [ 
-	
-	^ (self resourceUrl / aPeriod uuid asString) asString
+PeriodRESTfulControllerTest >> urlOf: aPeriod [
+
+	^ ( self resourceUrl / aPeriod uuid asString ) asString
 ]

@@ -66,5 +66,5 @@ PeriodRESTfulController >> providePaginationPolicy [
 { #category : #specification }
 PeriodRESTfulController >> specification [
 
-	^PeriodRESTfulControllerSpecification new
+	^ PeriodRESTfulControllerSpecification new
 ]
