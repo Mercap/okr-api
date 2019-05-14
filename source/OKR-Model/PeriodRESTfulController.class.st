@@ -16,7 +16,7 @@ PeriodRESTfulController class >> within: aPeriodManagementSystem [
 { #category : #'private - accessing' }
 PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 
-	^ ZnETag with: ( MD5 new hashMessage: aPeriod printString ) hex
+	^ ZnETag with: ( MD5 hashMessage: aPeriod printString ) hex
 ]
 
 { #category : #accessing }
