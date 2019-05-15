@@ -23,28 +23,14 @@ KeyResultTest >> testWeightMustBeAValidCompositionPercentage [
 
 	self
 		should: [ KeyResult describedBy: 'Implementar modelo de Key Result' weighted: -1 percent ]
-		raise: AssertionFailed
-		withExceptionDo: [ :signal | 
-			self
-				assert: signal messageText
-				equals: 'Key result weight must be a percentage between 0% and 100% (was -1%)'
-			].
-	self
+			raise: AssertionFailed
+			withMessageText: 'Key result weight must be a percentage between 0% and 100% (was -1%)';
 		should: [ KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 0 percent ]
-		raise: AssertionFailed
-		withExceptionDo: [ :signal | 
-			self
-				assert: signal messageText
-				equals: 'Key result weight must be a percentage between 0% and 100% (was 0%)'
-			].
-	self
+			raise: AssertionFailed
+			withMessageText: 'Key result weight must be a percentage between 0% and 100% (was 0%)';
 		should: [ KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 101 percent ]
-		raise: AssertionFailed
-		withExceptionDo: [ :signal | 
-			self
-				assert: signal messageText
-				equals: 'Key result weight must be a percentage between 0% and 100% (was 101%)'
-			].
+			raise: AssertionFailed
+			withMessageText: 'Key result weight must be a percentage between 0% and 100% (was 101%)'.
 
 	self
 		shouldnt: [ KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 1 percent ]
