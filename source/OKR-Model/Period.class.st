@@ -4,9 +4,10 @@ Class {
 	#instVars : [
 		'name',
 		'startDate',
-		'endDate'
+		'endDate',
+		'uuid'
 	],
-	#category : #'OKR-Model'
+	#category : #'OKR-Model-Core'
 }
 
 { #category : #'Instance creation' }
@@ -25,7 +26,8 @@ Period >> endDate [
 
 { #category : #initialization }
 Period >> initializeNamed: aName from: aStartDate to: anEndDate [
-
+	
+	uuid := UUID new.
 	name := aName.
 	startDate := aStartDate.
 	endDate := anEndDate
@@ -40,4 +42,10 @@ Period >> name [
 Period >> startDate [
 
 	^ startDate
+]
+
+{ #category : #accessing }
+Period >> uuid [
+	
+	^ uuid
 ]

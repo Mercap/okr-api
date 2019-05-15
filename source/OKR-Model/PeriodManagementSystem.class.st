@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'periods'
 	],
-	#category : #'OKR-Model'
+	#category : #'OKR-Model-Core'
 }
 
 { #category : #installing }
