@@ -34,6 +34,12 @@ PeriodManagementSystem >> name [
 	^ 'System to manage periods'
 ]
 
+{ #category : #querying }
+PeriodManagementSystem >> periodIdentifiedBy: anUUID ifFound: aBlock ifNone: aNoneBlock [
+
+	^ periods detect: [ :period | period uuid = anUUID ] ifFound: aBlock ifNone: aNoneBlock
+]
+
 { #category : #accessing }
 PeriodManagementSystem >> periods [
 	

@@ -33,11 +33,28 @@ PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 ]
 
 { #category : #API }
+PeriodRESTfulController >> getPeriodBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ | uuid |
+
+			uuid := UUID fromString: ( anHttpRequest at: #identifier ).
+			self periodManagementSystem
+				periodIdentifiedBy: uuid
+				ifFound: #yourself
+				ifNone: [ ObjectNotFound signal ]
+			]
+		encodedUsing: self specification periodMappingKey
+		basedOn: anHttpRequest
+		within: aContext
+]
+
+{ #category : #API }
 PeriodRESTfulController >> getPeriodsBasedOn: aTeaRequest within: aContext [
 
 	^ self
 		get: [ self periodManagementSystem periods ]
-		asCollectionEncodedUsing: self specification periodsMappingKey
+		asCollectionEncodedUsing: self specification periodMappingKey
 		basedOn: aTeaRequest
 		within: aContext
 ]

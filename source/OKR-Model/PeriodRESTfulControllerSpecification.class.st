@@ -26,7 +26,7 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0DecoderMapp
 PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
-		addDefaultRuleToEncode: self periodsMappingKey
+		addDefaultRuleToEncode: self periodMappingKey
 		to: self periodVersion1dot0dot0MediaType
 		using: [ :periods :context | 
 			String
@@ -74,10 +74,4 @@ PeriodRESTfulControllerSpecification >> periodMappingKey [
 PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 
 	^ 'application/vnd.mercap.period+json;version=1.0.0' asMediaType
-]
-
-{ #category : #accessing }
-PeriodRESTfulControllerSpecification >> periodsMappingKey [
-
-	^ 'periods'
 ]

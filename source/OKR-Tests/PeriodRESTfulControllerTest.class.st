@@ -80,6 +80,38 @@ PeriodRESTfulControllerTest >> testCreatePeriod [
 ]
 
 { #category : #tests }
+PeriodRESTfulControllerTest >> testGetAfterCreatePeriod [
+
+	self
+		assert: periodManagementSystem periods isEmpty;
+		assert:
+			( resourceController
+				createPeriodBasedOn:
+					( self
+						requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+				within: self newHttpRequestContext ) isCreated.
+	self
+		withTheOnlyOneIn: periodManagementSystem periods
+		do: [ :period | 
+			| response |
+
+			response := resourceController
+				getPeriodBasedOn:
+					( self requestToGetResourceIdentifiedBy: period uuid asString accepting: self defaultPeriodMediaType )
+				within: self newHttpRequestContext.
+			self
+				withJsonFromContentsIn: response
+				do: [ :json | 
+					self
+						assert: json name equals: '2018Q4';
+						assert: json startDate equals: '2018-10-01';
+						assert: json endDate equals: '2018-12-31';
+						assertUrl: ( json links at: #self ) equals: ( self urlOf: period )
+					]
+			]
+]
+
+{ #category : #tests }
 PeriodRESTfulControllerTest >> testGetPeriodsWithOnlyOneManaged [
 
 	| response period |
