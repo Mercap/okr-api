@@ -95,7 +95,7 @@ PeriodRESTfulControllerTest >> testGetPeriodsWithOnlyOneManaged [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType asMediaType
-			equals: resourceController specification periodPluralVersion1dot0dot0MediaType.
+			equals: resourceController specification periodVersion1dot0dot0MediaType.
 
 	self
 		withJsonFromContentsIn: response
@@ -125,7 +125,7 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 		assert: response isSuccess;
 		assert: response status equals: 200;
 		assert: response contentType asMediaType
-			equals: resourceController specification periodPluralVersion1dot0dot0MediaType.
+			equals: resourceController specification periodVersion1dot0dot0MediaType.
 
 	self withJsonFromContentsIn: response do: [ :periods | self assert: periods isEmpty ]
 ]

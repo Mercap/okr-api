@@ -27,7 +27,7 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn:
 
 	aBuilder
 		addDefaultRuleToEncode: self periodsMappingKey
-		to: self periodPluralVersion1dot0dot0MediaType
+		to: self periodVersion1dot0dot0MediaType
 		using: [ :periods :context | 
 			String
 				streamContents: [ :stream | 
@@ -68,17 +68,6 @@ PeriodRESTfulControllerSpecification >> getPeriodsRoute [
 PeriodRESTfulControllerSpecification >> periodMappingKey [
 
 	^ 'period'
-]
-
-{ #category : #accessing }
-PeriodRESTfulControllerSpecification >> periodPluralVersion1dot0dot0MediaType [
-
-	"El nombre es malo a proposito, ya que afecta al content negotiation.
-	Renombrar cuando arreglen el content negotiation en Stargate (https://github.com/ba-st/Stargate/issues/13),
-	Se deja de tal forma a modo de hackazo para que funcione GET /periods con Accept: */* 	(y funcione en los browsers sin definir Accept)
-	 -jmaestri"
-
-	^ 'application/vnd.mercap.periods+json;version=1.0.0' asMediaType
 ]
 
 { #category : #accessing }
