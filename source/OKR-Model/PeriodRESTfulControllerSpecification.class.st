@@ -5,11 +5,29 @@ Class {
 }
 
 { #category : #encoding }
-PeriodRESTfulControllerSpecification >> addJsonEncoderMappingIn: aBuilder [
+PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0DecoderMappingIn: aBuilder [
+
+	aBuilder
+		addDefaultRuleToDecode: self periodVersion1dot0dot0MediaType
+		to: self periodMappingKey
+		using: [ :json :context | 
+			| raw |
+
+			raw := NeoJSONObject fromString: json.
+
+			Period
+				named: raw name
+				from: ( Date fromString: raw startDate ) asGregorian
+				to: ( Date fromString: raw endDate ) asGregorian
+			]
+]
+
+{ #category : #encoding }
+PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder [
 
 	aBuilder
 		addDefaultRuleToEncode: self periodsMappingKey
-		to: self periodsVersion1dot0dot0MediaType
+		to: self periodVersion1dot0dot0MediaType
 		using: [ :periods :context | 
 			String
 				streamContents: [ :stream | 
@@ -20,7 +38,12 @@ PeriodRESTfulControllerSpecification >> addJsonEncoderMappingIn: aBuilder [
 								mapAccessors: #(#name #startDate #endDate);
 								mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ]
 							];
-						for: FixedDate customDo: [ :mapping | mapping encoder: #printString ];
+						for: FixedDate
+							customDo: [ :mapping | 
+							mapping
+								encoder:
+									[ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
+							];
 						nextPut: periods
 					]
 			]
@@ -42,13 +65,19 @@ PeriodRESTfulControllerSpecification >> getPeriodsRoute [
 ]
 
 { #category : #accessing }
-PeriodRESTfulControllerSpecification >> periodsMappingKey [
+PeriodRESTfulControllerSpecification >> periodMappingKey [
 
-	^ 'periods'
+	^ 'period'
 ]
 
 { #category : #accessing }
-PeriodRESTfulControllerSpecification >> periodsVersion1dot0dot0MediaType [
+PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 
-	^ 'application/vnd.mercap.periods+json;version=1.0.0' asMediaType
+	^ 'application/vnd.mercap.period+json;version=1.0.0' asMediaType
+]
+
+{ #category : #accessing }
+PeriodRESTfulControllerSpecification >> periodsMappingKey [
+
+	^ 'periods'
 ]

@@ -13,13 +13,26 @@ PeriodRESTfulController class >> within: aPeriodManagementSystem [
 	^ self new initializeWithin: aPeriodManagementSystem
 ]
 
+{ #category : #API }
+PeriodRESTfulController >> createPeriodBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		withCreatedResourceDo: [ :aPeriod | 
+			self periodManagementSystem startManagingPeriod: aPeriod.
+			aPeriod
+			]
+		decodedUsing: self specification periodMappingKey
+		basedOn: anHttpRequest
+		within: aContext
+]
+
 { #category : #'private - accessing' }
 PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 
 	^ ZnETag with: ( MD5 hashMessage: aPeriod printString ) hex
 ]
 
-{ #category : #accessing }
+{ #category : #API }
 PeriodRESTfulController >> getPeriodsBasedOn: aTeaRequest within: aContext [
 
 	^ self
