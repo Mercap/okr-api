@@ -49,10 +49,37 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn:
 			]
 ]
 
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> createPeriodRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: self endpoint
+		evaluating: [ :service :httpRequest :context | service createPeriodBasedOn: httpRequest within: context ]
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> deletePeriodRoute [
+
+	^ RouteSpecification
+		handling: #DELETE
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service deletePeriodBasedOn: httpRequest within: context ]
+]
+
 { #category : #accessing }
 PeriodRESTfulControllerSpecification >> endpoint [
 
 	^ '/periods'
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> getPeriodRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service getPeriodBasedOn: httpRequest within: context ]
 ]
 
 { #category : #routes }
@@ -70,8 +97,23 @@ PeriodRESTfulControllerSpecification >> periodMappingKey [
 	^ 'period'
 ]
 
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> periodTemplate [
+	
+	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: #identifier
+]
+
 { #category : #accessing }
 PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 
 	^ 'application/vnd.mercap.period+json;version=1.0.0' asMediaType
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> updatePeriodRoute [
+
+	^ RouteSpecification
+		handling: #PUT
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service updatePeriodBasedOn: httpRequest within: context ]
 ]
