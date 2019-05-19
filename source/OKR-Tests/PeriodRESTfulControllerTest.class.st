@@ -25,7 +25,7 @@ PeriodRESTfulControllerTest >> registerPeriod: aPeriod [
 	periodManagementSystem startManagingPeriod: aPeriod
 ]
 
-{ #category : #'private -  support' }
+{ #category : #'private - support' }
 PeriodRESTfulControllerTest >> requestToCreatePeriodFrom: aJSON [
 
 	^ self requestToPOST: aJSON as: self defaultPeriodMediaType
@@ -45,6 +45,17 @@ PeriodRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [
 
 	^ self requestToGet: self resourceUrl accepting: anAcceptHeader
+]
+
+{ #category : #'private - support' }
+PeriodRESTfulControllerTest >> requestToUpdatePeriod: aPeriodLocation with: anUpdatePeriod [
+	
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest put: aPeriodLocation)
+				entity: (ZnEntity with: anUpdatePeriod type: self defaultPeriodMediaType );
+				yourself)
+        
 ]
 
 { #category : #running }
@@ -160,6 +171,37 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 			equals: resourceController specification periodVersion1dot0dot0MediaType.
 
 	self withJsonFromContentsIn: response do: [ :periods | self assert: periods isEmpty ]
+]
+
+{ #category : #tests }
+PeriodRESTfulControllerTest >> testUpdatePeriod [
+
+	| creationResponse updateResponse |
+
+	self assert: periodManagementSystem periods isEmpty.
+	creationResponse := resourceController
+		createPeriodBasedOn:
+			( self
+				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+		within: self newHttpRequestContext.
+
+	updateResponse := resourceController
+		updatePeriodBasedOn:
+			( self
+				requestToUpdatePeriod: creationResponse location
+				with: '{"name":"2019Q1","startDate":"2019-01-01", "endDate":"2019-01-15"}' )
+		within: self newHttpRequestContext.
+
+	self
+		assert: updateResponse isCreated;
+		withTheOnlyOneIn: periodManagementSystem periods
+			do: [ :foundPeriod | 
+			self
+				assert: updateResponse location equals: ( self urlOf: foundPeriod );
+				assert: foundPeriod name equals: '2019Q1';
+				assert: foundPeriod startDate equals: January first , 2019;
+				assert: foundPeriod endDate equals: January fifteenth , 2019
+			]
 ]
 
 { #category : #'private - accessing' }

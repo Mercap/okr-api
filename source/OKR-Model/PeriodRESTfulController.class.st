@@ -98,3 +98,18 @@ PeriodRESTfulController >> specification [
 
 	^ PeriodRESTfulControllerSpecification new
 ]
+
+{ #category : #'as yet unclassified' }
+PeriodRESTfulController >> updatePeriodBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		withCreatedResourceDo: [ :anUpdatedPeriod | 
+			self periodManagementSystem
+				periodIdentifiedBy: ( UUID fromString: ( anHttpRequest uri segments at: 2 ) )
+				ifFound: [ :oldPeriod | oldPeriod synchronizeWith: anUpdatedPeriod ]
+				ifNone: [ ObjectNotFound signal ]
+			]
+		decodedUsing: self specification periodMappingKey
+		basedOn: anHttpRequest
+		within: aContext
+]
