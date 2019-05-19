@@ -36,13 +36,12 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn:
 							do: [ :mapping | 
 							mapping
 								mapAccessors: #(#name #startDate #endDate);
-								mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ]
+								mapHypermediaControlsIn: context
 							];
 						for: FixedDate
 							customDo: [ :mapping | 
 							mapping
-								encoder:
-									[ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
+								encoder: [ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
 							];
 						nextPut: periods
 					]
