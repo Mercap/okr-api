@@ -28,22 +28,23 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn:
 	aBuilder
 		addDefaultRuleToEncode: self periodMappingKey
 		to: self periodVersion1dot0dot0MediaType
-		using: [ :periods :context | 
+		using: [ :resource :context | 
 			String
 				streamContents: [ :stream | 
 					( NeoJSONWriter on: stream )
 						for: Period
 							do: [ :mapping | 
-							mapping
-								mapAccessors: #(#name #startDate #endDate);
-								mapHypermediaControlsIn: context
+							mapping mapAccessors: #(#name #startDate #endDate).
+							( resource isA: Collection )
+								ifTrue: [ mapping mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ] ]
+								ifFalse: [ mapping mapHypermediaControlsIn: context ]
 							];
 						for: FixedDate
 							customDo: [ :mapping | 
 							mapping
 								encoder: [ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
 							];
-						nextPut: periods
+						nextPut: resource
 					]
 			]
 ]
