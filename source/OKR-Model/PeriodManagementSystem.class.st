@@ -51,3 +51,9 @@ PeriodManagementSystem >> startManagingPeriod: aPeriod [
 	
 	periods add: aPeriod
 ]
+
+{ #category : #managing }
+PeriodManagementSystem >> stopManagingPeriod: aPeriod [ 
+	
+	periods remove: aPeriod 
+]

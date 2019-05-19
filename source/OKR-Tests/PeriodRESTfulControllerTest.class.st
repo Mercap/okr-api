@@ -31,6 +31,12 @@ PeriodRESTfulControllerTest >> requestToCreatePeriodFrom: aJSON [
 	^ self requestToPOST: aJSON as: self defaultPeriodMediaType
 ]
 
+{ #category : #'private - support' }
+PeriodRESTfulControllerTest >> requestToDeletePeriod: aPeriodLocation [
+
+	^ TeaRequest fromZnRequest: ( ZnRequest delete: aPeriodLocation )
+]
+
 { #category : #'private - accessing' }
 PeriodRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 
@@ -88,6 +94,28 @@ PeriodRESTfulControllerTest >> testCreatePeriod [
 				assert: foundPeriod startDate equals: October first , 2018;
 				assert: foundPeriod endDate equals: December lastDayOfMonth , 2018
 			]
+]
+
+{ #category : #tests }
+PeriodRESTfulControllerTest >> testDeletePeriod [
+
+	| creationResponse updateResponse |
+
+	self assert: periodManagementSystem periods isEmpty.
+	creationResponse := resourceController
+		createPeriodBasedOn:
+			( self
+				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+		within: self newHttpRequestContext.
+	self assert: periodManagementSystem periods size equals: 1.
+	
+	updateResponse := resourceController
+		deletePeriodBasedOn: ( self requestToDeletePeriod: creationResponse location )
+		within: self newHttpRequestContext.
+
+	self
+		assert: updateResponse isSuccess;
+		assert: periodManagementSystem periods isEmpty
 ]
 
 { #category : #tests }

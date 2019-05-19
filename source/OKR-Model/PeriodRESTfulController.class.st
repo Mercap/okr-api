@@ -26,6 +26,20 @@ PeriodRESTfulController >> createPeriodBasedOn: anHttpRequest within: aContext [
 		within: aContext
 ]
 
+{ #category : #API }
+PeriodRESTfulController >> deletePeriodBasedOn: anHttpRequest within: aContext [
+
+	| uuid |
+
+	uuid := UUID fromString: ( anHttpRequest uri segments at: 2 ).
+	self periodManagementSystem
+		periodIdentifiedBy: uuid
+		ifFound: [ :period | self periodManagementSystem stopManagingPeriod: period ]
+		ifNone: [ ^ ZnResponse notFound: anHttpRequest uri ].
+
+	^ ZnResponse noContent 
+]
+
 { #category : #'private - accessing' }
 PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 
@@ -99,7 +113,7 @@ PeriodRESTfulController >> specification [
 	^ PeriodRESTfulControllerSpecification new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 PeriodRESTfulController >> updatePeriodBasedOn: anHttpRequest within: aContext [
 
 	^ self

@@ -67,3 +67,20 @@ PeriodManagementSystemUserStory >> testStartManagingPeriod [
 		withTheOnlyOneIn: self periodManagementSystem periods
 		do: [ :foundPeriod | self assert: period equals: foundPeriod ]
 ]
+
+{ #category : #'private - running' }
+PeriodManagementSystemUserStory >> testStopManagingPeriod [
+
+	| period |
+
+	period := Period named: '2019Q1' from: March first , 2019 to: ( May , 2019 ) lastDate.
+
+	self periodManagementSystem startManagingPeriod: period.
+
+	self
+		withTheOnlyOneIn: self periodManagementSystem periods
+		do: [ :foundPeriod | self assert: period equals: foundPeriod ]. 
+		
+	self periodManagementSystem stopManagingPeriod: period. 
+	self assert: self periodManagementSystem periods isEmpty
+]
