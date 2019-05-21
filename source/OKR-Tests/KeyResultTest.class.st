@@ -19,6 +19,16 @@ KeyResultTest >> testCreation [
 ]
 
 { #category : #tests }
+KeyResultTest >> testUUIDTrait [
+
+	| kr |
+
+	kr := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
+
+	self assert: ( kr uuid isA: UUID )
+]
+
+{ #category : #tests }
 KeyResultTest >> testWeightMustBeAValidCompositionPercentage [
 
 	self

@@ -1,11 +1,12 @@
 Class {
 	#name : #Period,
 	#superclass : #Object,
+	#traits : 'IdentifiableObject',
+	#classTraits : 'IdentifiableObject classTrait',
 	#instVars : [
 		'name',
 		'startDate',
-		'endDate',
-		'uuid'
+		'endDate'
 	],
 	#category : #'OKR-Model-Core'
 }
@@ -26,8 +27,7 @@ Period >> endDate [
 
 { #category : #initialization }
 Period >> initializeNamed: aName from: aStartDate to: anEndDate [
-	
-	uuid := UUID new.
+
 	name := aName.
 	startDate := aStartDate.
 	endDate := anEndDate
@@ -50,10 +50,4 @@ Period >> synchronizeWith: aPeriod [
 	name := aPeriod name. 
 	startDate := aPeriod startDate. 
 	endDate := aPeriod endDate
-]
-
-{ #category : #accessing }
-Period >> uuid [
-	
-	^ uuid
 ]

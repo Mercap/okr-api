@@ -1,6 +1,8 @@
 Class {
 	#name : #KeyResult,
 	#superclass : #Object,
+	#traits : 'IdentifiableObject',
+	#classTraits : 'IdentifiableObject classTrait',
 	#instVars : [
 		'description',
 		'weight'
