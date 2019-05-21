@@ -19,7 +19,7 @@ PeriodManagementSystem >> implementedInterfaces [
 	^ #(#PeriodManagementSystem)
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 PeriodManagementSystem >> initialize [
 
 	super initialize. 

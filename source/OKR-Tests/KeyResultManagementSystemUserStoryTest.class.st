@@ -1,29 +1,29 @@
 Class {
-	#name : #KeyResultManagementSystemUserStory,
+	#name : #KeyResultManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#category : #'OKR-Tests-Core'
 }
 
 { #category : #accessing }
-KeyResultManagementSystemUserStory >> keyResultManagementSystem [
+KeyResultManagementSystemUserStoryTest >> keyResultManagementSystem [
 
 	^ rootSystem >> #KeyResultManagementSystem
 ]
 
 { #category : #'private - running' }
-KeyResultManagementSystemUserStory >> setUpRequirements [
+KeyResultManagementSystemUserStoryTest >> setUpRequirements [
 
 	self registerSubsystem: KeyResultManagementSystem new
 ]
 
 { #category : #'private - running' }
-KeyResultManagementSystemUserStory >> testEmptySystem [
+KeyResultManagementSystemUserStoryTest >> testEmptySystem [
 
 	self assert: self keyResultManagementSystem keyResults isEmpty
 ]
 
 { #category : #'private - running' }
-KeyResultManagementSystemUserStory >> testStartManagingKeyResult [
+KeyResultManagementSystemUserStoryTest >> testStartManagingKeyResult [
 
 	| keyResult |
 

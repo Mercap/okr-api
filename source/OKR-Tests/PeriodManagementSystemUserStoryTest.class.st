@@ -1,29 +1,29 @@
 Class {
-	#name : #PeriodManagementSystemUserStory,
+	#name : #PeriodManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
 	#category : #'OKR-Tests-Core'
 }
 
 { #category : #accessing }
-PeriodManagementSystemUserStory >> periodManagementSystem [
+PeriodManagementSystemUserStoryTest >> periodManagementSystem [
 	
 	^ rootSystem >> #PeriodManagementSystem
 ]
 
 { #category : #'private - running' }
-PeriodManagementSystemUserStory >> setUpRequirements [
+PeriodManagementSystemUserStoryTest >> setUpRequirements [
 	
 	self registerSubsystem: PeriodManagementSystem new
 ]
 
 { #category : #'private - running' }
-PeriodManagementSystemUserStory >> testEmptySystem [
+PeriodManagementSystemUserStoryTest >> testEmptySystem [
 
 	self assert: self periodManagementSystem periods isEmpty
 ]
 
 { #category : #'private - running' }
-PeriodManagementSystemUserStory >> testPeriodIdentifiedBy [
+PeriodManagementSystemUserStoryTest >> testPeriodIdentifiedBy [
 
 	| q1 q2 found |
 
@@ -55,7 +55,7 @@ PeriodManagementSystemUserStory >> testPeriodIdentifiedBy [
 ]
 
 { #category : #'private - running' }
-PeriodManagementSystemUserStory >> testStartManagingPeriod [
+PeriodManagementSystemUserStoryTest >> testStartManagingPeriod [
 
 	| period |
 
@@ -69,7 +69,7 @@ PeriodManagementSystemUserStory >> testStartManagingPeriod [
 ]
 
 { #category : #'private - running' }
-PeriodManagementSystemUserStory >> testStopManagingPeriod [
+PeriodManagementSystemUserStoryTest >> testStopManagingPeriod [
 
 	| period |
 
