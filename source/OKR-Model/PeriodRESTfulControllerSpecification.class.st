@@ -23,10 +23,32 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0DecoderMapp
 ]
 
 { #category : #encoding }
+PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0MappingIn: aBuilder [
+
+	self
+		addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+		withHypermediaFrom: [ :resource :context :mapping | mapping mapHypermediaControlsIn: context ]
+		encoding: self periodMappingKey
+]
+
+{ #category : #encoding }
 PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder [
 
+	self
+		addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+		withHypermediaFrom:
+			[ :resource :context :mapping | mapping mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ] ]
+		encoding: self periodsMappingKey
+]
+
+{ #category : #encoding }
+PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+	withHypermediaFrom: hypermediaControlsMapping
+	encoding: aMappingKey [
+
+
 	aBuilder
-		addDefaultRuleToEncode: self periodMappingKey
+		addDefaultRuleToEncode: aMappingKey
 		to: self periodVersion1dot0dot0MediaType
 		using: [ :resource :context | 
 			String
@@ -35,9 +57,7 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn:
 						for: Period
 							do: [ :mapping | 
 							mapping mapAccessors: #(#name #startDate #endDate).
-							( resource isA: Collection )
-								ifTrue: [ mapping mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ] ]
-								ifFalse: [ mapping mapHypermediaControlsIn: context ]
+							hypermediaControlsMapping value: resource value: context value: mapping
 							];
 						for: FixedDate
 							customDo: [ :mapping | 
@@ -107,6 +127,12 @@ PeriodRESTfulControllerSpecification >> periodTemplate [
 PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 
 	^ 'application/vnd.mercap.period+json;version=1.0.0' asMediaType
+]
+
+{ #category : #accessing }
+PeriodRESTfulControllerSpecification >> periodsMappingKey [
+
+	^ 'periods'
 ]
 
 { #category : #routes }

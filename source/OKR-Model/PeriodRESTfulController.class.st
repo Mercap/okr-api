@@ -35,9 +35,9 @@ PeriodRESTfulController >> deletePeriodBasedOn: anHttpRequest within: aContext [
 	self periodManagementSystem
 		periodIdentifiedBy: uuid
 		ifFound: [ :period | self periodManagementSystem stopManagingPeriod: period ]
-		ifNone: [ ^ ZnResponse notFound: anHttpRequest uri ].
+		ifNone: [ ^ ObjectNotFound signal ].
 
-	^ ZnResponse noContent 
+	^ ZnResponse noContent
 ]
 
 { #category : #'private - accessing' }
@@ -68,7 +68,7 @@ PeriodRESTfulController >> getPeriodsBasedOn: aTeaRequest within: aContext [
 
 	^ self
 		get: [ self periodManagementSystem periods ]
-		asCollectionEncodedUsing: self specification periodMappingKey
+		asCollectionEncodedUsing: self specification periodsMappingKey
 		basedOn: aTeaRequest
 		within: aContext
 ]
@@ -84,7 +84,7 @@ PeriodRESTfulController >> locationOf: aPeriod [
 
 	| baseUrl |
 
-	baseUrl := ( baseUrlOptional withContentDo: [ :theBaseUrl | theBaseUrl ] ifUnused: [ '' ] ) asZnUrl.
+	baseUrl := ( baseUrlOptional withContentDo: #yourself ifUnused: [ '' ] ) asZnUrl.
 
 	^ baseUrl / self specification endpoint / aPeriod uuid printString asZnUrl
 ]
