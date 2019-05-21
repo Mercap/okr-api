@@ -23,36 +23,83 @@ PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0DecoderMapp
 ]
 
 { #category : #encoding }
+PeriodRESTfulControllerSpecification >> addJsonPeriodVersion1dot0dot0MappingIn: aBuilder [
+
+	self
+		addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+		withHypermediaFrom: [ :resource :context :mapping | mapping mapHypermediaControlsIn: context ]
+		encoding: self periodMappingKey
+]
+
+{ #category : #encoding }
 PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder [
 
+	self
+		addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+		withHypermediaFrom:
+			[ :resource :context :mapping | mapping mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ] ]
+		encoding: self periodsMappingKey
+]
+
+{ #category : #encoding }
+PeriodRESTfulControllerSpecification >> addJsonPeriodsVersion1dot0dot0MappingIn: aBuilder
+	withHypermediaFrom: hypermediaControlsMapping
+	encoding: aMappingKey [
+
+
 	aBuilder
-		addDefaultRuleToEncode: self periodsMappingKey
+		addDefaultRuleToEncode: aMappingKey
 		to: self periodVersion1dot0dot0MediaType
-		using: [ :periods :context | 
+		using: [ :resource :context | 
 			String
 				streamContents: [ :stream | 
 					( NeoJSONWriter on: stream )
 						for: Period
 							do: [ :mapping | 
-							mapping
-								mapAccessors: #(#name #startDate #endDate);
-								mapAsHypermediaControls: [ :period | context hypermediaControlsFor: period ]
+							mapping mapAccessors: #(#name #startDate #endDate).
+							hypermediaControlsMapping value: resource value: context value: mapping
 							];
 						for: FixedDate
 							customDo: [ :mapping | 
 							mapping
-								encoder:
-									[ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
+								encoder: [ :date | String streamContents: [ :s | date asSmalltalkDate asDateAndTime printYMDOn: s ] ]
 							];
-						nextPut: periods
+						nextPut: resource
 					]
 			]
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> createPeriodRoute [
+
+	^ RouteSpecification
+		handling: #POST
+		at: self endpoint
+		evaluating: [ :service :httpRequest :context | service createPeriodBasedOn: httpRequest within: context ]
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> deletePeriodRoute [
+
+	^ RouteSpecification
+		handling: #DELETE
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service deletePeriodBasedOn: httpRequest within: context ]
 ]
 
 { #category : #accessing }
 PeriodRESTfulControllerSpecification >> endpoint [
 
 	^ '/periods'
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> getPeriodRoute [
+
+	^ RouteSpecification
+		handling: #GET
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service getPeriodBasedOn: httpRequest within: context ]
 ]
 
 { #category : #routes }
@@ -70,6 +117,12 @@ PeriodRESTfulControllerSpecification >> periodMappingKey [
 	^ 'period'
 ]
 
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> periodTemplate [
+	
+	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: #identifier
+]
+
 { #category : #accessing }
 PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 
@@ -80,4 +133,13 @@ PeriodRESTfulControllerSpecification >> periodVersion1dot0dot0MediaType [
 PeriodRESTfulControllerSpecification >> periodsMappingKey [
 
 	^ 'periods'
+]
+
+{ #category : #routes }
+PeriodRESTfulControllerSpecification >> updatePeriodRoute [
+
+	^ RouteSpecification
+		handling: #PUT
+		at: self periodTemplate
+		evaluating: [ :service :httpRequest :context | service updatePeriodBasedOn: httpRequest within: context ]
 ]

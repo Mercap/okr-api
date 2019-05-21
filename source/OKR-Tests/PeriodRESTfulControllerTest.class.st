@@ -25,10 +25,16 @@ PeriodRESTfulControllerTest >> registerPeriod: aPeriod [
 	periodManagementSystem startManagingPeriod: aPeriod
 ]
 
-{ #category : #'private -  support' }
+{ #category : #'private - support' }
 PeriodRESTfulControllerTest >> requestToCreatePeriodFrom: aJSON [
 
 	^ self requestToPOST: aJSON as: self defaultPeriodMediaType
+]
+
+{ #category : #'private - support' }
+PeriodRESTfulControllerTest >> requestToDeletePeriod: aPeriodLocation [
+
+	^ TeaRequest fromZnRequest: ( ZnRequest delete: aPeriodLocation )
 ]
 
 { #category : #'private - accessing' }
@@ -45,6 +51,17 @@ PeriodRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [
 
 	^ self requestToGet: self resourceUrl accepting: anAcceptHeader
+]
+
+{ #category : #'private - support' }
+PeriodRESTfulControllerTest >> requestToUpdatePeriod: aPeriodLocation with: anUpdatePeriod [
+	
+	^ TeaRequest
+		fromZnRequest:
+			((ZnRequest put: aPeriodLocation)
+				entity: (ZnEntity with: anUpdatePeriod type: self defaultPeriodMediaType );
+				yourself)
+        
 ]
 
 { #category : #running }
@@ -76,6 +93,60 @@ PeriodRESTfulControllerTest >> testCreatePeriod [
 				assert: foundPeriod name equals: '2018Q4';
 				assert: foundPeriod startDate equals: October first , 2018;
 				assert: foundPeriod endDate equals: December lastDayOfMonth , 2018
+			]
+]
+
+{ #category : #tests }
+PeriodRESTfulControllerTest >> testDeletePeriod [
+
+	| creationResponse updateResponse |
+
+	self assert: periodManagementSystem periods isEmpty.
+	creationResponse := resourceController
+		createPeriodBasedOn:
+			( self
+				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+		within: self newHttpRequestContext.
+	self assert: periodManagementSystem periods size equals: 1.
+	
+	updateResponse := resourceController
+		deletePeriodBasedOn: ( self requestToDeletePeriod: creationResponse location )
+		within: self newHttpRequestContext.
+
+	self
+		assert: updateResponse isSuccess;
+		assert: periodManagementSystem periods isEmpty
+]
+
+{ #category : #tests }
+PeriodRESTfulControllerTest >> testGetAfterCreatePeriod [
+
+	self
+		assert: periodManagementSystem periods isEmpty;
+		assert:
+			( resourceController
+				createPeriodBasedOn:
+					( self
+						requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+				within: self newHttpRequestContext ) isCreated.
+	self
+		withTheOnlyOneIn: periodManagementSystem periods
+		do: [ :period | 
+			| response |
+
+			response := resourceController
+				getPeriodBasedOn:
+					( self requestToGetResourceIdentifiedBy: period uuid asString accepting: self defaultPeriodMediaType )
+				within: self newHttpRequestContext.
+			self
+				withJsonFromContentsIn: response
+				do: [ :json | 
+					self
+						assert: json name equals: '2018Q4';
+						assert: json startDate equals: '2018-10-01';
+						assert: json endDate equals: '2018-12-31';
+						assertUrl: ( json links at: #self ) equals: ( self urlOf: period )
+					]
 			]
 ]
 
@@ -128,6 +199,37 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 			equals: resourceController specification periodVersion1dot0dot0MediaType.
 
 	self withJsonFromContentsIn: response do: [ :periods | self assert: periods isEmpty ]
+]
+
+{ #category : #tests }
+PeriodRESTfulControllerTest >> testUpdatePeriod [
+
+	| creationResponse updateResponse |
+
+	self assert: periodManagementSystem periods isEmpty.
+	creationResponse := resourceController
+		createPeriodBasedOn:
+			( self
+				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
+		within: self newHttpRequestContext.
+
+	updateResponse := resourceController
+		updatePeriodBasedOn:
+			( self
+				requestToUpdatePeriod: creationResponse location
+				with: '{"name":"2019Q1","startDate":"2019-01-01", "endDate":"2019-01-15"}' )
+		within: self newHttpRequestContext.
+
+	self
+		assert: updateResponse isCreated;
+		withTheOnlyOneIn: periodManagementSystem periods
+			do: [ :foundPeriod | 
+			self
+				assert: updateResponse location equals: ( self urlOf: foundPeriod );
+				assert: foundPeriod name equals: '2019Q1';
+				assert: foundPeriod startDate equals: January first , 2019;
+				assert: foundPeriod endDate equals: January fifteenth , 2019
+			]
 ]
 
 { #category : #'private - accessing' }

@@ -19,7 +19,7 @@ PeriodManagementSystem >> implementedInterfaces [
 	^ #(#PeriodManagementSystem)
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 PeriodManagementSystem >> initialize [
 
 	super initialize. 
@@ -34,6 +34,12 @@ PeriodManagementSystem >> name [
 	^ 'System to manage periods'
 ]
 
+{ #category : #querying }
+PeriodManagementSystem >> periodIdentifiedBy: anUUID ifFound: aBlock ifNone: aNoneBlock [
+
+	^ periods detect: [ :period | period uuid = anUUID ] ifFound: aBlock ifNone: aNoneBlock
+]
+
 { #category : #accessing }
 PeriodManagementSystem >> periods [
 	
@@ -44,4 +50,10 @@ PeriodManagementSystem >> periods [
 PeriodManagementSystem >> startManagingPeriod: aPeriod [ 
 	
 	periods add: aPeriod
+]
+
+{ #category : #managing }
+PeriodManagementSystem >> stopManagingPeriod: aPeriod [ 
+	
+	periods remove: aPeriod 
 ]

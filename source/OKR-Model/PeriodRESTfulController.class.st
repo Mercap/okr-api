@@ -26,10 +26,41 @@ PeriodRESTfulController >> createPeriodBasedOn: anHttpRequest within: aContext [
 		within: aContext
 ]
 
+{ #category : #API }
+PeriodRESTfulController >> deletePeriodBasedOn: anHttpRequest within: aContext [
+
+	| uuid |
+
+	uuid := UUID fromString: ( anHttpRequest uri segments at: 2 ).
+	self periodManagementSystem
+		periodIdentifiedBy: uuid
+		ifFound: [ :period | self periodManagementSystem stopManagingPeriod: period ]
+		ifNone: [ ^ ObjectNotFound signal ].
+
+	^ ZnResponse noContent
+]
+
 { #category : #'private - accessing' }
 PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
 
 	^ ZnETag with: ( MD5 hashMessage: aPeriod printString ) hex
+]
+
+{ #category : #API }
+PeriodRESTfulController >> getPeriodBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		get: [ | uuid |
+
+			uuid := UUID fromString: ( anHttpRequest at: #identifier ).
+			self periodManagementSystem
+				periodIdentifiedBy: uuid
+				ifFound: #yourself
+				ifNone: [ ObjectNotFound signal ]
+			]
+		encodedUsing: self specification periodMappingKey
+		basedOn: anHttpRequest
+		within: aContext
 ]
 
 { #category : #API }
@@ -53,7 +84,7 @@ PeriodRESTfulController >> locationOf: aPeriod [
 
 	| baseUrl |
 
-	baseUrl := ( baseUrlOptional withContentDo: [ :theBaseUrl | theBaseUrl ] ifUnused: [ '' ] ) asZnUrl.
+	baseUrl := ( baseUrlOptional withContentDo: #yourself ifUnused: [ '' ] ) asZnUrl.
 
 	^ baseUrl / self specification endpoint / aPeriod uuid printString asZnUrl
 ]
@@ -80,4 +111,19 @@ PeriodRESTfulController >> providePaginationPolicy [
 PeriodRESTfulController >> specification [
 
 	^ PeriodRESTfulControllerSpecification new
+]
+
+{ #category : #API }
+PeriodRESTfulController >> updatePeriodBasedOn: anHttpRequest within: aContext [
+
+	^ self
+		withCreatedResourceDo: [ :anUpdatedPeriod | 
+			self periodManagementSystem
+				periodIdentifiedBy: ( UUID fromString: ( anHttpRequest uri segments at: 2 ) )
+				ifFound: [ :oldPeriod | oldPeriod synchronizeWith: anUpdatedPeriod ]
+				ifNone: [ ObjectNotFound signal ]
+			]
+		decodedUsing: self specification periodMappingKey
+		basedOn: anHttpRequest
+		within: aContext
 ]

@@ -19,7 +19,7 @@ KeyResultManagementSystem >> implementedInterfaces [
 	^ #(#KeyResultManagementSystem)
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 KeyResultManagementSystem >> initialize [
 
 	super initialize. 

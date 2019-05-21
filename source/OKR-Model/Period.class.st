@@ -44,6 +44,14 @@ Period >> startDate [
 	^ startDate
 ]
 
+{ #category : #synchronizing }
+Period >> synchronizeWith: aPeriod [ 
+	
+	name := aPeriod name. 
+	startDate := aPeriod startDate. 
+	endDate := aPeriod endDate
+]
+
 { #category : #accessing }
 Period >> uuid [
 	
