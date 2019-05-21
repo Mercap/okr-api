@@ -40,7 +40,7 @@ PeriodManagementSystem >> periodIdentifiedBy: anUUID ifFound: aBlock ifNone: aNo
 	^ periods detect: [ :period | period uuid = anUUID ] ifFound: aBlock ifNone: aNoneBlock
 ]
 
-{ #category : #accessing }
+{ #category : #querying }
 PeriodManagementSystem >> periods [
 	
 	^ periods

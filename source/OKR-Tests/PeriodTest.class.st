@@ -29,3 +29,12 @@ PeriodTest >> testPeriodSynchronization [
 	self assert: period startDate equals: January first , 2020.
 	self assert: period endDate equals: ( March , 2020 ) lastDate
 ]
+
+{ #category : #Testing }
+PeriodTest >> testUUIDTrait [
+
+	| period |
+
+	period := Period named: '2019Q1' from: January first , 2019 to: ( March , 2019 ) lastDate.
+	self assert: ( period uuid isA: UUID )
+]

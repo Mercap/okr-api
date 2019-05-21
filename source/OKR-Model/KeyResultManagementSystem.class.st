@@ -28,7 +28,13 @@ KeyResultManagementSystem >> initialize [
 
 ]
 
-{ #category : #accessing }
+{ #category : #querying }
+KeyResultManagementSystem >> keyResultIdentifiedBy: anUUID ifFound: aBlock ifNone: aNoneBlock [
+
+	^ keyResults detect: [ :keyResult | keyResult uuid = anUUID ] ifFound: aBlock ifNone: aNoneBlock
+]
+
+{ #category : #querying }
 KeyResultManagementSystem >> keyResults [
 	
 	^ keyResults
@@ -44,4 +50,10 @@ KeyResultManagementSystem >> name [
 KeyResultManagementSystem >> startManagingKeyResult: aKeyResult [
 
 	keyResults add: aKeyResult
+]
+
+{ #category : #querying }
+KeyResultManagementSystem >> stopManagingKeyResult: aKeyResult [
+
+	keyResults remove: aKeyResult
 ]
