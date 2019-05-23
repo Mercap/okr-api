@@ -2,15 +2,15 @@ Class {
 	#name : #ObjectiveRESTfulController,
 	#superclass : #ResourceRESTfulController,
 	#instVars : [
-		'objectiveManagementSystem'
+		'okrManagementSystem'
 	],
 	#category : #'OKR-Model-API'
 }
 
 { #category : #'instance creation' }
-ObjectiveRESTfulController class >> within: aPeriodManagementSystem [ 
+ObjectiveRESTfulController class >> within: anObjectiveManagementSystem [ 
 	
-	^ self new initializeWithin: aPeriodManagementSystem
+	^ self new initializeWithin: anObjectiveManagementSystem
 ]
 
 { #category : #API }
@@ -18,7 +18,7 @@ ObjectiveRESTfulController >> createObjectiveBasedOn: anHttpRequest within: aCon
 
 	^ self
 		withCreatedResourceDo: [ :anObjective | 
-			self objectiveManagementSystem startManagingObjective: anObjective.
+			self okrManagementSystem startManagingObjective: anObjective.
 			anObjective
 			]
 		decodedUsing: self specification objectiveMappingKey
@@ -32,9 +32,9 @@ ObjectiveRESTfulController >> deleteObjectiveBasedOn: anHttpRequest within: aCon
 	| uuid |
 
 	uuid := UUID fromString: ( anHttpRequest uri segments at: 2 ).
-	self objectiveManagementSystem
+	self okrManagementSystem
 		objectiveIdentifiedBy: uuid
-		ifFound: [ :anObjective | self objectiveManagementSystem stopManagingObjective: anObjective ]
+		ifFound: [ :anObjective | self okrManagementSystem stopManagingObjective: anObjective ]
 		ifNone: [ ^ ObjectNotFound signal ].
 
 	^ ZnResponse noContent
@@ -53,7 +53,7 @@ ObjectiveRESTfulController >> getObjectiveBasedOn: anHttpRequest within: aContex
 		get: [ | uuid |
 
 			uuid := UUID fromString: ( anHttpRequest at: #identifier ).
-			self objectiveManagementSystem
+			self okrManagementSystem
 				objectiveIdentifiedBy: uuid
 				ifFound: #yourself
 				ifNone: [ ObjectNotFound signal ]
@@ -67,16 +67,16 @@ ObjectiveRESTfulController >> getObjectiveBasedOn: anHttpRequest within: aContex
 ObjectiveRESTfulController >> getObjectivesBasedOn: aTeaRequest within: aContext [
 
 	^ self
-		get: [ self objectiveManagementSystem objectives ]
+		get: [ self okrManagementSystem objectives ]
 		asCollectionEncodedUsing: self specification objectivesMappingKey
 		basedOn: aTeaRequest
 		within: aContext
 ]
 
 { #category : #initialize }
-ObjectiveRESTfulController >> initializeWithin: anObjectiveManagementSystem [ 
+ObjectiveRESTfulController >> initializeWithin: anOkrManagementSystem [ 
 	
-	objectiveManagementSystem := anObjectiveManagementSystem.
+	okrManagementSystem := anOkrManagementSystem.
 ]
 
 { #category : #'private - accessing' }
@@ -90,9 +90,9 @@ ObjectiveRESTfulController >> locationOf: anObjective [
 ]
 
 { #category : #'private - accessing' }
-ObjectiveRESTfulController >> objectiveManagementSystem [
+ObjectiveRESTfulController >> okrManagementSystem [
 	
-	^ objectiveManagementSystem 
+	^ okrManagementSystem 
 ]
 
 { #category : #'private - accessing' }
@@ -118,7 +118,7 @@ ObjectiveRESTfulController >> updateObjectiveBasedOn: anHttpRequest within: aCon
 
 	^ self
 		withCreatedResourceDo: [ :anUpdatedObjective | 
-			self objectiveManagementSystem
+			self okrManagementSystem
 				objectiveIdentifiedBy: ( UUID fromString: ( anHttpRequest uri segments at: 2 ) )
 				ifFound: [ :oldObjective | oldObjective synchronizeWith: anUpdatedObjective ]
 				ifNone: [ ObjectNotFound signal ]

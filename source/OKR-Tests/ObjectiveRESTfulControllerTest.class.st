@@ -2,7 +2,7 @@ Class {
 	#name : #ObjectiveRESTfulControllerTest,
 	#superclass : #ResourceRESTfulControllerTest,
 	#instVars : [
-		'objectiveManagementSystem'
+		'okrManagementSystem'
 	],
 	#category : #'OKR-Tests-Controllers'
 }
@@ -55,7 +55,7 @@ ObjectiveRESTfulControllerTest >> getObjectiveIdentifiedAs: anIdentifier [
 { #category : #'private - support' }
 ObjectiveRESTfulControllerTest >> registerObjective: anObjective [
 
-	objectiveManagementSystem startManagingObjective: anObjective
+	okrManagementSystem startManagingObjective: anObjective
 ]
 
 { #category : #'private - support' }
@@ -75,12 +75,12 @@ ObjectiveRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 ]
 
 { #category : #'private - support' }
-ObjectiveRESTfulControllerTest >> requestToUpdateObjective: aPeriodLocation with: anUpdatePeriod [
+ObjectiveRESTfulControllerTest >> requestToUpdateObjective: anObjectiveLocation with: anUpdateObjective [
 	
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest put: aPeriodLocation)
-				entity: (ZnEntity with: anUpdatePeriod type: self defaultObjectiveMediaType );
+			((ZnRequest put: anObjectiveLocation)
+				entity: (ZnEntity with: anUpdateObjective type: self defaultObjectiveMediaType );
 				yourself)
         
 ]
@@ -88,9 +88,9 @@ ObjectiveRESTfulControllerTest >> requestToUpdateObjective: aPeriodLocation with
 { #category : #running }
 ObjectiveRESTfulControllerTest >> setUpResourceController [
 
-	objectiveManagementSystem := ObjectiveManagementSystem new.
+	okrManagementSystem := OKRManagementSystem new.
 
-	resourceController := ObjectiveRESTfulController within: objectiveManagementSystem
+	resourceController := ObjectiveRESTfulController within: okrManagementSystem
 ]
 
 { #category : #tests }
@@ -98,12 +98,12 @@ ObjectiveRESTfulControllerTest >> testCreateEmptyObjective [
 
 	| response |
 
-	self assert: objectiveManagementSystem objectives isEmpty.
+	self assert: okrManagementSystem objectives isEmpty.
 	response := self createObjectiveBasedOn: self emptyObjectiveJson.
 
 	self
 		assert: response isCreated;
-		withTheOnlyOneIn: objectiveManagementSystem objectives
+		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
 				assert: response location equals: ( self urlOf: foundObjective );
@@ -117,9 +117,9 @@ ObjectiveRESTfulControllerTest >> testDeleteObjective [
 
 	| creationResponse updateResponse |
 
-	self assert: objectiveManagementSystem objectives isEmpty.
+	self assert: okrManagementSystem objectives isEmpty.
 	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
-	self assert: objectiveManagementSystem objectives size equals: 1.
+	self assert: okrManagementSystem objectives size equals: 1.
 	
 	updateResponse := resourceController
 		deleteObjectiveBasedOn: ( self requestToDeleteObjective: creationResponse location )
@@ -127,17 +127,17 @@ ObjectiveRESTfulControllerTest >> testDeleteObjective [
 
 	self
 		assert: updateResponse isSuccess;
-		assert: objectiveManagementSystem objectives isEmpty
+		assert: okrManagementSystem objectives isEmpty
 ]
 
 { #category : #tests }
 ObjectiveRESTfulControllerTest >> testGetAfterCreateObjective [
 
 	self
-		assert: objectiveManagementSystem objectives isEmpty;
+		assert: okrManagementSystem objectives isEmpty;
 		assert: ( self createObjectiveBasedOn: self emptyObjectiveJson ) isCreated.
 	self
-		withTheOnlyOneIn: objectiveManagementSystem objectives
+		withTheOnlyOneIn: okrManagementSystem objectives
 		do: [ :objective | 
 			| response |
 
@@ -204,7 +204,7 @@ ObjectiveRESTfulControllerTest >> testUpdateObjective [
 
 	| creationResponse updateResponse |
 
-	self assert: objectiveManagementSystem objectives isEmpty.
+	self assert: okrManagementSystem objectives isEmpty.
 	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
 	updateResponse := resourceController
 		updateObjectiveBasedOn:
@@ -215,7 +215,7 @@ ObjectiveRESTfulControllerTest >> testUpdateObjective [
 
 	self
 		assert: updateResponse isCreated;
-		withTheOnlyOneIn: objectiveManagementSystem objectives
+		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
 				assert: creationResponse location equals: ( self urlOf: foundObjective );
