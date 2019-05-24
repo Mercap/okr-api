@@ -2,13 +2,13 @@
 An OKRRRESTfulAPIServerRunnerTest is a test class for testing the behavior of OKRRRESTfulAPIServerRunner
 "
 Class {
-	#name : #OKRRRESTfulAPIServerRunnerTest,
+	#name : #OKRCommandLineHandlerTest,
 	#superclass : #TestCase,
 	#category : #'OKR-Tests-API'
 }
 
 { #category : #accessing }
-OKRRRESTfulAPIServerRunnerTest >> implementedEndpoints [
+OKRCommandLineHandlerTest >> implementedEndpoints [
 
 	^ ResourceRESTfulControllerSpecification allSubclasses
 		select: [ :class | class package name beginsWith: ( self class package name copyUpTo: $- ) ]
@@ -16,7 +16,27 @@ OKRRRESTfulAPIServerRunnerTest >> implementedEndpoints [
 ]
 
 { #category : #tests }
-OKRRRESTfulAPIServerRunnerTest >> testControllers [
+OKRCommandLineHandlerTest >> testAccessing [
+
+	| handler |
+
+	handler := OKRCommandLineHandler
+		commandLine:
+			( CommandLineArguments
+				withArguments:
+					{OKRCommandLineHandler commandName.
+					'--api-server-url=/'.
+					'--port=8888'} ).
+	self
+		assert: OKRCommandLineHandler commandName equals: 'start';
+		assert: OKRCommandLineHandler description equals: 'Start OKR API';
+		assert: handler logPrefix equals: 'okr';
+		assert: ( handler configuration at: #port ) equals: 8888;
+		assert: ( handler configuration at: #'api-server-url' ) equals: '/'
+]
+
+{ #category : #tests }
+OKRCommandLineHandlerTest >> testControllers [
 
 	| controllers endpoints |
 
@@ -31,7 +51,7 @@ OKRRRESTfulAPIServerRunnerTest >> testControllers [
 ]
 
 { #category : #tests }
-OKRRRESTfulAPIServerRunnerTest >> testRootSystem [
+OKRCommandLineHandlerTest >> testRootSystem [
 
 	| rootSystem |
 

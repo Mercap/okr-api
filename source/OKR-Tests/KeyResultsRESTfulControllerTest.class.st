@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'okrManagementSystem'
 	],
-	#category : #'OKR-Tests-Controllers'
+	#category : #'OKR-Tests-API'
 }
 
 { #category : #'private - support' }

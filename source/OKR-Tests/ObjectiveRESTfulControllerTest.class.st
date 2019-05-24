@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'okrManagementSystem'
 	],
-	#category : #'OKR-Tests-Controllers'
+	#category : #'OKR-Tests-API'
 }
 
 { #category : #'private - support' }
@@ -216,6 +216,23 @@ ObjectiveRESTfulControllerTest >> testGetWhenEmptyObjectives [
 			equals: resourceController specification objectiveVersion1dot0dot0MediaType.
 
 	self withJsonFromContentsIn: response do: [ :objectives | self assert: objectives isEmpty ]
+]
+
+{ #category : #tests }
+ObjectiveRESTfulControllerTest >> testRoutes [
+
+	resourceController specification routes
+		with:
+			{( #POST -> '/objectives' ).
+			( #DELETE -> '/objectives/<identifier:IsUUID>' ).
+			( #GET -> '/objectives/<identifier:IsUUID>' ).
+			( #GET -> '/objectives' ).
+			( #PATCH -> '/objectives/<identifier:IsUUID>' )}
+		do: [ :route :expectedRoute | 
+			self
+				assert: route httpMethod equals: expectedRoute key;
+				assert: route urlTemplate equals: expectedRoute value
+			]
 ]
 
 { #category : #tests }

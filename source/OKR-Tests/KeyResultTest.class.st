@@ -14,7 +14,8 @@ KeyResultTest >> testComparing [
 
 	kr := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
 	kr2 := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
-	self assert: kr equals: kr2
+	self assert: kr equals: kr2.
+	self assert: ( Set with: kr with: kr2 ) size equals: 1
 ]
 
 { #category : #tests }

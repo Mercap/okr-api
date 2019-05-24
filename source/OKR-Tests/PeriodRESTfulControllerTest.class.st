@@ -202,6 +202,23 @@ PeriodRESTfulControllerTest >> testGetWhenEmptyPeriods [
 ]
 
 { #category : #tests }
+PeriodRESTfulControllerTest >> testRoutes [
+
+	resourceController specification routes
+		with:
+			{( #POST -> '/periods' ).
+			( #DELETE -> '/periods/<identifier:IsUUID>' ).
+			( #GET -> '/periods/<identifier:IsUUID>' ).
+			( #GET -> '/periods' ).
+			( #PATCH -> '/periods/<identifier:IsUUID>' )}
+		do: [ :route :expectedRoute | 
+			self
+				assert: route httpMethod equals: expectedRoute key;
+				assert: route urlTemplate equals: expectedRoute value
+			]
+]
+
+{ #category : #tests }
 PeriodRESTfulControllerTest >> testUpdatePeriod [
 
 	| creationResponse updateResponse |

@@ -139,7 +139,7 @@ PeriodRESTfulControllerSpecification >> periodsMappingKey [
 PeriodRESTfulControllerSpecification >> updatePeriodRoute [
 
 	^ RouteSpecification
-		handling: #PUT
+		handling: #PATCH
 		at: self periodTemplate
 		evaluating: [ :service :httpRequest :context | service updatePeriodBasedOn: httpRequest within: context ]
 ]
