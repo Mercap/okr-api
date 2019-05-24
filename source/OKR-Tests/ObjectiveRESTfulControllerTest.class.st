@@ -120,7 +120,7 @@ ObjectiveRESTfulControllerTest >> testDeleteObjective [
 	self assert: okrManagementSystem objectives isEmpty.
 	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
 	self assert: okrManagementSystem objectives size equals: 1.
-	
+
 	updateResponse := resourceController
 		deleteObjectiveBasedOn: ( self requestToDeleteObjective: creationResponse location )
 		within: self newHttpRequestContext.

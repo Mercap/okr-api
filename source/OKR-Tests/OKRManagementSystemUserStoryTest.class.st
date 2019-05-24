@@ -1,7 +1,7 @@
 Class {
 	#name : #OKRManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : #'OKR-Tests-Core'
+	#category : #'OKR-Tests-UserStory'
 }
 
 { #category : #accessing }
@@ -12,7 +12,7 @@ OKRManagementSystemUserStoryTest >> okrManagementSystem [
 
 { #category : #'private - running' }
 OKRManagementSystemUserStoryTest >> setUpRequirements [
-	
+
 	self registerSubsystem: OKRManagementSystem new
 ]
 
@@ -20,7 +20,6 @@ OKRManagementSystemUserStoryTest >> setUpRequirements [
 OKRManagementSystemUserStoryTest >> testEmptySystem [
 
 	self assert: self okrManagementSystem objectives isEmpty
-	
 ]
 
 { #category : #' testing - objectives' }
@@ -58,25 +57,20 @@ OKRManagementSystemUserStoryTest >> testObjectiveIdentifiedBy [
 { #category : #'testing - key results' }
 OKRManagementSystemUserStoryTest >> testStartManagingKeyResultForAnObjective [
 
-	| keyResult objective|
+	| keyResult objective |
 
 	keyResult := KeyResult describedBy: 'do something' weighted: 20 percent.
-	
 	objective := Objective describedBy: 'An Objective' withKeyResults: #().
 
 	self okrManagementSystem startManagingObjective: objective.
-
 	self
 		withTheOnlyOneIn: self okrManagementSystem objectives
 		do: [ :foundObjective | self assert: objective equals: foundObjective ].
 
-
-	self assert: (self okrManagementSystem keyResultsfor: objective) isEmpty.
-	
+	self assert: ( self okrManagementSystem keyResultsfor: objective ) isEmpty.
 	self okrManagementSystem startManagingKeyResult: keyResult for: objective.
-	
 	self
-		withTheOnlyOneIn: (self okrManagementSystem keyResultsfor: objective)
+		withTheOnlyOneIn: ( self okrManagementSystem keyResultsfor: objective )
 		do: [ :foundKeyResult | self assert: keyResult equals: foundKeyResult ]
 ]
 
@@ -97,12 +91,10 @@ OKRManagementSystemUserStoryTest >> testStartManagingObjective [
 { #category : #'testing - key results' }
 OKRManagementSystemUserStoryTest >> testStartManagingObjectiveWithKeyResult [
 
-	| keyResult objective|
+	| keyResult objective |
 
 	keyResult := KeyResult describedBy: 'do something' weighted: 20 percent.
-
-	
-	objective := Objective describedBy: 'An Objective' withKeyResults:  {keyResult}.
+	objective := Objective describedBy: 'An Objective' withKeyResults: {keyResult}.
 
 	self okrManagementSystem startManagingObjective: objective.
 
@@ -111,7 +103,7 @@ OKRManagementSystemUserStoryTest >> testStartManagingObjectiveWithKeyResult [
 		do: [ :foundObjective | self assert: objective equals: foundObjective ].
 
 	self
-		withTheOnlyOneIn: (self okrManagementSystem keyResultsfor: objective)
+		withTheOnlyOneIn: ( self okrManagementSystem keyResultsfor: objective )
 		do: [ :foundKeyResult | self assert: keyResult equals: foundKeyResult ]
 ]
 
@@ -126,8 +118,8 @@ OKRManagementSystemUserStoryTest >> testStopManagingObjective [
 
 	self
 		withTheOnlyOneIn: self okrManagementSystem objectives
-		do: [ :foundObjective | self assert: objective equals: foundObjective ]. 
-		
-	self okrManagementSystem stopManagingObjective: objective. 
+		do: [ :foundObjective | self assert: objective equals: foundObjective ].
+
+	self okrManagementSystem stopManagingObjective: objective.
 	self assert: self okrManagementSystem objectives isEmpty
 ]
