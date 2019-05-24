@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 PeriodManagementSystemUserStoryTest >> periodManagementSystem [
-	
+
 	^ rootSystem >> #PeriodManagementSystem
 ]
 

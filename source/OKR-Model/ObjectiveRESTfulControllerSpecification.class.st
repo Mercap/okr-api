@@ -115,7 +115,7 @@ ObjectiveRESTfulControllerSpecification >> objectiveMappingKey [
 
 { #category : #accessing }
 ObjectiveRESTfulControllerSpecification >> objectiveTemplate [
-	
+
 	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: #identifier
 ]
 
@@ -135,12 +135,8 @@ ObjectiveRESTfulControllerSpecification >> objectivesMappingKey [
 ObjectiveRESTfulControllerSpecification >> parseKeyResultsFrom: aCollection [
 
 	^ aCollection
-		collect: [ :json | 
-			| raw |
-
-			raw := NeoJSONObject fromString: json.
-			KeyResult describedBy: raw description weighted: ( raw weight * 100 ) asInteger percent
-			]
+		collect:
+			[ :raw | KeyResult describedBy: raw description weighted: ( raw weight * 100 ) asInteger percent ]
 ]
 
 { #category : #routes }

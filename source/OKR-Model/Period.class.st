@@ -14,9 +14,7 @@ Class {
 { #category : #'Instance creation' }
 Period class >> named: aName from: aStartDate to: anEndDate [
 
-	^ self new
-		initializeNamed: aName from: aStartDate to: anEndDate;
-		yourself
+	^ self new initializeNamed: aName from: aStartDate to: anEndDate
 ]
 
 { #category : #accessing }
@@ -35,6 +33,7 @@ Period >> initializeNamed: aName from: aStartDate to: anEndDate [
 
 { #category : #accessing }
 Period >> name [
+
 	^ name
 ]
 
@@ -45,9 +44,9 @@ Period >> startDate [
 ]
 
 { #category : #synchronizing }
-Period >> synchronizeWith: aPeriod [ 
-	
-	name := aPeriod name. 
-	startDate := aPeriod startDate. 
+Period >> synchronizeWith: aPeriod [
+
+	name := aPeriod name.
+	startDate := aPeriod startDate.
 	endDate := aPeriod endDate
 ]

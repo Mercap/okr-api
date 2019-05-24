@@ -9,7 +9,8 @@ Class {
 
 { #category : #'instance creation' }
 KeyResultsRESTfulController class >> within: aParentController [
-	self new initializeWithin: aParentController
+
+	^ self new initializeWithin: aParentController
 ]
 
 { #category : #'private - accessing' }
@@ -19,18 +20,19 @@ KeyResultsRESTfulController >> entityTagOf: aKeyResult encodedAs: mediaType with
 ]
 
 { #category : #initialization }
-KeyResultsRESTfulController >> initializeWithin: aParentController [ 
+KeyResultsRESTfulController >> initializeWithin: aParentController [
 
-	parentController := aParentController 
+	parentController := aParentController
 ]
 
 { #category : #'private - accessing' }
 KeyResultsRESTfulController >> locationOf: aKeyResult within: aContext [
+
 	| baseUrl objective |
+
 	objective := aContext objectUnder: #objective.
-	baseUrl := (baseUrlOptional withContentDo: #yourself ifUnused: [ '' ])
-		asZnUrl.
-	^ baseUrl / (parentController locationOf: objective within: aContext)
+	baseUrl := ( baseUrlOptional withContentDo: #yourself ifUnused: [ '' ] ) asZnUrl.
+	^ baseUrl / ( parentController locationOf: objective within: aContext )
 		/ self specification endpoint / aKeyResult uuid printString asZnUrl
 ]
 

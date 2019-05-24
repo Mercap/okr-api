@@ -23,10 +23,11 @@ KeyResult class >> describedBy: aDescription weighted: aPercentage [
 { #category : #comparing }
 KeyResult >> = anotherKeyResult [
 
-	^ description = anotherKeyResult description and: [ weight = anotherKeyResult weight ]
+	^ description = anotherKeyResult description
+		and: [ weight = anotherKeyResult weight ]
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 KeyResult >> description [
 
 	^ description
@@ -45,7 +46,7 @@ KeyResult >> initializeDescribedBy: aDescription weighted: aPercentage [
 	weight := aPercentage
 ]
 
-{ #category : #Accessing }
+{ #category : #accessing }
 KeyResult >> weight [
 
 	^ weight

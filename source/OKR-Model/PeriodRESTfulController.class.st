@@ -8,8 +8,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-PeriodRESTfulController class >> within: aPeriodManagementSystem [ 
-	
+PeriodRESTfulController class >> within: aPeriodManagementSystem [
+
 	^ self new initializeWithin: aPeriodManagementSystem
 ]
 
@@ -74,9 +74,9 @@ PeriodRESTfulController >> getPeriodsBasedOn: aTeaRequest within: aContext [
 ]
 
 { #category : #initialize }
-PeriodRESTfulController >> initializeWithin: aPeriodManagementSystem [ 
-	
-	periodManagementSystem := aPeriodManagementSystem.
+PeriodRESTfulController >> initializeWithin: aPeriodManagementSystem [
+
+	periodManagementSystem := aPeriodManagementSystem
 ]
 
 { #category : #'private - accessing' }
@@ -91,8 +91,8 @@ PeriodRESTfulController >> locationOf: aPeriod within: aContext [
 
 { #category : #'private - accessing' }
 PeriodRESTfulController >> periodManagementSystem [
-	
-	^ periodManagementSystem 
+
+	^ periodManagementSystem
 ]
 
 { #category : #'private - accessing' }

@@ -9,8 +9,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-ObjectiveRESTfulController class >> within: anObjectiveManagementSystem [ 
-	
+ObjectiveRESTfulController class >> within: anObjectiveManagementSystem [
+
 	^ self new initializeWithin: anObjectiveManagementSystem
 ]
 
@@ -44,7 +44,8 @@ ObjectiveRESTfulController >> deleteObjectiveBasedOn: anHttpRequest within: aCon
 { #category : #'private - accessing' }
 ObjectiveRESTfulController >> entityTagOf: anObjective encodedAs: mediaType within: aContext [
 
-	^ ZnETag with: ( MD5 hashMessage: anObjective printString ) hex
+	^ ZnETag with: ( MD5 hashMessage: anObjective printString )
+	hex
 ]
 
 { #category : #API }
@@ -75,8 +76,8 @@ ObjectiveRESTfulController >> getObjectivesBasedOn: aTeaRequest within: aContext
 ]
 
 { #category : #initialize }
-ObjectiveRESTfulController >> initializeWithin: anOkrManagementSystem [ 
-	
+ObjectiveRESTfulController >> initializeWithin: anOkrManagementSystem [
+
 	okrManagementSystem := anOkrManagementSystem.
 	keyResultsController := KeyResultsRESTfulController within: self
 ]
@@ -93,8 +94,8 @@ ObjectiveRESTfulController >> locationOf: anObjective within: aContext [
 
 { #category : #'private - accessing' }
 ObjectiveRESTfulController >> okrManagementSystem [
-	
-	^ okrManagementSystem 
+
+	^ okrManagementSystem
 ]
 
 { #category : #'private - accessing' }

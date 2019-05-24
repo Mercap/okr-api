@@ -119,7 +119,7 @@ PeriodRESTfulControllerSpecification >> periodMappingKey [
 
 { #category : #routes }
 PeriodRESTfulControllerSpecification >> periodTemplate [
-	
+
 	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: #identifier
 ]
 

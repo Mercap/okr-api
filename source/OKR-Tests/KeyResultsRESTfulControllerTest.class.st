@@ -18,5 +18,6 @@ KeyResultsRESTfulControllerTest >> setUpResourceController [
 
 	okrManagementSystem := OKRManagementSystem new.
 
-	resourceController := KeyResultsRESTfulController within: (ObjectiveRESTfulController within: okrManagementSystem)
+	resourceController := KeyResultsRESTfulController
+		within: ( ObjectiveRESTfulController within: okrManagementSystem )
 ]

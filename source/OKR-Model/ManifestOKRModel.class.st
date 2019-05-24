@@ -16,7 +16,7 @@ ManifestOKRModel class >> initialize [
 			named: 'System to manage periods'
 			declaring: #(#periodIdentifiedBy:ifFound:ifNone: #periods #startManagingPeriod: #stopManagingPeriod:);
 		registerInterfaceAt: #OKRManagementSystem
-			named: 'System to manage objectives and key results' 
+			named: 'System to manage objectives and key results'
 			declaring:
 			#(#objectiveIdentifiedBy:ifFound:ifNone: #objectives #startManagingObjectives: #stopManagingObjectives: #updateObjective:with: #keyResultsfor:)
 ]

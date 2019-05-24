@@ -31,8 +31,8 @@ ObjectiveRESTfulControllerTest >> defaultObjectiveMediaType [
 ObjectiveRESTfulControllerTest >> emptyObjectiveJson [
 
 	^ NeoJSONObject new
-		at: 'description' put: 'First one'; 
-		at: 'keyResults' put: Array new; 
+		at: 'description' put: 'First one';
+		at: 'keyResults' put: Array new;
 		asString
 ]
 
@@ -54,21 +54,21 @@ ObjectiveRESTfulControllerTest >> getObjectiveIdentifiedAs: anIdentifier [
 
 { #category : #tests }
 ObjectiveRESTfulControllerTest >> keyResult [
+
 	^ KeyResult describedBy: 'descripcion' weighted: 20 percent
 ]
 
 { #category : #'private - accessing' }
 ObjectiveRESTfulControllerTest >> objectiveWithOneKeyResultJson [
+
 	^ NeoJSONObject new
 		at: 'description' put: 'First one';
 		at: 'keyResults'
 			put:
-			(Array
-				with:
-					(NeoJSONObject new
-						at: 'description' put: 'descripcion';
-						at: 'weight' put: 0.2;
-						asString));
+			{( NeoJSONObject new
+				at: 'description' put: 'descripcion';
+				at: 'weight' put: 0.2;
+				yourself )};
 		asString
 ]
 
@@ -96,13 +96,12 @@ ObjectiveRESTfulControllerTest >> requestToGet: aUrl accepting: anAcceptHeader [
 
 { #category : #'private - support' }
 ObjectiveRESTfulControllerTest >> requestToUpdateObjective: anObjectiveLocation with: anUpdateObjective [
-	
+
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest put: anObjectiveLocation)
-				entity: (ZnEntity with: anUpdateObjective type: self defaultObjectiveMediaType );
-				yourself)
-        
+			( ( ZnRequest put: anObjectiveLocation )
+				entity: ( ZnEntity with: anUpdateObjective type: self defaultObjectiveMediaType );
+				yourself )
 ]
 
 { #category : #running }
@@ -221,62 +220,64 @@ ObjectiveRESTfulControllerTest >> testGetWhenEmptyObjectives [
 
 { #category : #tests }
 ObjectiveRESTfulControllerTest >> testUpdateObjectiveDescription [
+
 	| creationResponse updateResponse |
+
 	self assert: okrManagementSystem objectives isEmpty.
-	creationResponse := self
-		createObjectiveBasedOn: self emptyObjectiveJson.
+	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
 	self
 		assert: creationResponse isCreated;
 		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
 				assert: foundObjective description equals: 'First one';
-				assert: foundObjective keyResults isEmpty ].
+				assert: foundObjective keyResults isEmpty
+			].
 	updateResponse := resourceController
 		updateObjectiveBasedOn:
-			(self
+			( self
 				requestToUpdateObjective: creationResponse location
-				with: '{"description":"Second one","keyResults":[]}')
+				with: '{"description":"Second one","keyResults":[]}' )
 		within: self newHttpRequestContext.
 	self
 		assert: updateResponse isCreated;
 		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
-				assert: creationResponse location
-					equals: (self urlOf: foundObjective);
+				assert: creationResponse location equals: ( self urlOf: foundObjective );
 				assert: foundObjective description equals: 'Second one';
-				assert: foundObjective keyResults isEmpty ]
+				assert: foundObjective keyResults isEmpty
+			]
 ]
 
 { #category : #tests }
 ObjectiveRESTfulControllerTest >> testUpdateObjectiveKeyResults [
+
 	| creationResponse updateResponse |
+
 	self assert: okrManagementSystem objectives isEmpty.
-	creationResponse := self
-		createObjectiveBasedOn: self emptyObjectiveJson.
+	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
 	self
 		assert: creationResponse isCreated;
 		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
 				assert: foundObjective description equals: 'First one';
-				assert: foundObjective keyResults isEmpty ].
+				assert: foundObjective keyResults isEmpty
+			].
 	updateResponse := resourceController
 		updateObjectiveBasedOn:
-			(self
-				requestToUpdateObjective: creationResponse location
-				with: self objectiveWithOneKeyResultJson)
+			( self requestToUpdateObjective: creationResponse location with: self objectiveWithOneKeyResultJson )
 		within: self newHttpRequestContext.
 	self
 		assert: updateResponse isCreated;
 		withTheOnlyOneIn: okrManagementSystem objectives
 			do: [ :foundObjective | 
 			self
-				assert: creationResponse location
-					equals: (self urlOf: foundObjective);
+				assert: creationResponse location equals: ( self urlOf: foundObjective );
 				assert: foundObjective description equals: 'First one';
-				assert: foundObjective keyResults first equals: self keyResult ]
+				assert: foundObjective keyResults first equals: self keyResult
+			]
 ]
 
 { #category : #'private - accessing' }

@@ -9,13 +9,11 @@ Class {
 
 { #category : #tests }
 KeyResultTest >> testComparing [
+
 	| kr kr2 |
-	kr := KeyResult
-		describedBy: 'Implementar modelo de Key Result'
-		weighted: 20 percent.
-	kr2 := KeyResult
-		describedBy: 'Implementar modelo de Key Result'
-		weighted: 20 percent.
+
+	kr := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
+	kr2 := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
 	self assert: kr equals: kr2
 ]
 

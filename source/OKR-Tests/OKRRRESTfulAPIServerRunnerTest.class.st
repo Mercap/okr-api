@@ -7,6 +7,14 @@ Class {
 	#category : #'OKR-Tests-API'
 }
 
+{ #category : #accessing }
+OKRRRESTfulAPIServerRunnerTest >> implementedEndpoints [
+
+	^ ResourceRESTfulControllerSpecification allSubclasses
+		select: [ :class | class package name beginsWith: ( self class package name copyUpTo: $- ) ]
+		thenCollect: [ :spec | spec new endpoint ]
+]
+
 { #category : #tests }
 OKRRRESTfulAPIServerRunnerTest >> testControllers [
 
@@ -14,8 +22,12 @@ OKRRRESTfulAPIServerRunnerTest >> testControllers [
 
 	controllers := OKRCommandLineHandler new controllers.
 	endpoints := controllers collect: [ :controller | controller specification endpoint ].
-
-	#('/periods') do: [ :endpoint | self assert: endpoints includes: endpoint ]
+	self implementedEndpoints
+		do: [ :endpoint | 
+			self
+				assert: ( endpoints includes: endpoint )
+				description: ( '<1s> is implemented but not included on the installed controllers' expandMacrosWith: endpoint )
+			]
 ]
 
 { #category : #tests }
@@ -25,6 +37,6 @@ OKRRRESTfulAPIServerRunnerTest >> testRootSystem [
 
 	rootSystem := OKRCommandLineHandler new rootSystem.
 	self
-		assert: ( rootSystem systemsImplementing: #PeriodManagementSystem ) notEmpty;
-		assert: ( rootSystem systemsImplementing: #KeyResultManagementSystem ) notEmpty
+		deny: ( rootSystem systemsImplementing: #PeriodManagementSystem ) isEmpty;
+		deny: ( rootSystem systemsImplementing: #OKRManagementSystem ) isEmpty
 ]

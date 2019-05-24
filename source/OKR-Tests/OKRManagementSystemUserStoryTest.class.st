@@ -6,7 +6,7 @@ Class {
 
 { #category : #accessing }
 OKRManagementSystemUserStoryTest >> okrManagementSystem [
-	
+
 	^ rootSystem >> #OKRManagementSystem
 ]
 
@@ -106,23 +106,22 @@ OKRManagementSystemUserStoryTest >> testStopManagingObjective [
 
 { #category : #' testing - objectives' }
 OKRManagementSystemUserStoryTest >> testUpdateObjective [
+
 	| objective keyResult |
-	objective := Objective
-		describedBy: 'An Objective'
-		withKeyResults: #().
+
+	objective := Objective describedBy: 'An Objective' withKeyResults: #().
 	self okrManagementSystem startManagingObjective: objective.
 	self
 		withTheOnlyOneIn: self okrManagementSystem objectives
 		do: [ :foundObjective | self assert: objective equals: foundObjective ].
-	self
-		assert: (self okrManagementSystem keyResultsfor: objective) isEmpty.
-	keyResult := KeyResult
-		describedBy: 'do something'
-		weighted: 20 percent.
+	self assert: ( self okrManagementSystem keyResultsfor: objective ) isEmpty.
+	keyResult := KeyResult describedBy: 'do something' weighted: 20 percent.
 
-	self okrManagementSystem updateObjective: objective with: (Objective describedBy: 'An Objective' withKeyResults: {keyResult}).
-	
+	self okrManagementSystem
+		updateObjective: objective
+		with: ( Objective describedBy: 'An Objective' withKeyResults: {keyResult} ).
+
 	self
-		withTheOnlyOneIn: (self okrManagementSystem keyResultsfor: objective)
+		withTheOnlyOneIn: ( self okrManagementSystem keyResultsfor: objective )
 		do: [ :foundKeyResult | self assert: keyResult equals: foundKeyResult ]
 ]

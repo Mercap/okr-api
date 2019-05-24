@@ -22,16 +22,14 @@ OKRManagementSystem >> implementedInterfaces [
 { #category : #initialization }
 OKRManagementSystem >> initialize [
 
-	super initialize. 
-	objectivesByUUID := Dictionary new. 
-
-
+	super initialize.
+	objectivesByUUID := Dictionary new
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> keyResultsfor: anObjective [
 
-	^objectivesByUUID at: anObjective uuid ifPresent: [:objective | objective keyResults ]
+	^ objectivesByUUID at: anObjective uuid ifPresent: [ :objective | objective keyResults ]
 ]
 
 { #category : #accessing }
@@ -62,11 +60,10 @@ OKRManagementSystem >> startManagingObjective: anObjective [
 OKRManagementSystem >> stopManagingObjective: anObjective [
 
 	objectivesByUUID removeKey: anObjective uuid
-
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> updateObjective: anObjective with: aNewObjective [
 
-	objectivesByUUID at: anObjective uuid put: (anObjective synchronizeWith: aNewObjective)
+	objectivesByUUID at: anObjective uuid put: ( anObjective synchronizeWith: aNewObjective )
 ]

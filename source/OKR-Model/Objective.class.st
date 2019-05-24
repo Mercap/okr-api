@@ -36,8 +36,8 @@ Objective >> keyResults [
 ]
 
 { #category : #synchronizing }
-Objective >> synchronizeWith: anObjective [ 
-	
-	description := anObjective description. 
+Objective >> synchronizeWith: anObjective [
+
+	description := anObjective description.
 	keyResults := anObjective keyResults
 ]
