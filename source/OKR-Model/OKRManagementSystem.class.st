@@ -53,17 +53,6 @@ OKRManagementSystem >> objectives [
 ]
 
 { #category : #'objective management' }
-OKRManagementSystem >> startManagingKeyResult: aKeyResult for: anObjective [
-	| newObjective |
-	newObjective := Objective
-		describedBy: anObjective description
-		withKeyResults: (anObjective keyResults copyWith: aKeyResult).
-	^ objectivesByUUID
-		at: anObjective uuid
-		ifPresent: [ :objective | objective synchronizeWith: newObjective ]
-]
-
-{ #category : #'objective management' }
 OKRManagementSystem >> startManagingObjective: anObjective [
 
 	objectivesByUUID at: anObjective uuid put: anObjective
@@ -74,4 +63,10 @@ OKRManagementSystem >> stopManagingObjective: anObjective [
 
 	objectivesByUUID removeKey: anObjective uuid
 
+]
+
+{ #category : #'objective management' }
+OKRManagementSystem >> updateObjective: anObjective with: aNewObjective [
+
+	objectivesByUUID at: anObjective uuid put: (anObjective synchronizeWith: aNewObjective)
 ]

@@ -41,7 +41,7 @@ PeriodRESTfulController >> deletePeriodBasedOn: anHttpRequest within: aContext [
 ]
 
 { #category : #'private - accessing' }
-PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType [
+PeriodRESTfulController >> entityTagOf: aPeriod encodedAs: mediaType within: aContext [
 
 	^ ZnETag with: ( MD5 hashMessage: aPeriod printString ) hex
 ]
@@ -80,7 +80,7 @@ PeriodRESTfulController >> initializeWithin: aPeriodManagementSystem [
 ]
 
 { #category : #'private - accessing' }
-PeriodRESTfulController >> locationOf: aPeriod [
+PeriodRESTfulController >> locationOf: aPeriod within: aContext [
 
 	| baseUrl |
 
@@ -105,6 +105,12 @@ PeriodRESTfulController >> provideHypermediaPolicy [
 PeriodRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+PeriodRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }

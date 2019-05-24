@@ -54,26 +54,6 @@ OKRManagementSystemUserStoryTest >> testObjectiveIdentifiedBy [
 	self assert: found
 ]
 
-{ #category : #'testing - key results' }
-OKRManagementSystemUserStoryTest >> testStartManagingKeyResultForAnObjective [
-
-	| keyResult objective |
-
-	keyResult := KeyResult describedBy: 'do something' weighted: 20 percent.
-	objective := Objective describedBy: 'An Objective' withKeyResults: #().
-
-	self okrManagementSystem startManagingObjective: objective.
-	self
-		withTheOnlyOneIn: self okrManagementSystem objectives
-		do: [ :foundObjective | self assert: objective equals: foundObjective ].
-
-	self assert: ( self okrManagementSystem keyResultsfor: objective ) isEmpty.
-	self okrManagementSystem startManagingKeyResult: keyResult for: objective.
-	self
-		withTheOnlyOneIn: ( self okrManagementSystem keyResultsfor: objective )
-		do: [ :foundKeyResult | self assert: keyResult equals: foundKeyResult ]
-]
-
 { #category : #' testing - objectives' }
 OKRManagementSystemUserStoryTest >> testStartManagingObjective [
 
@@ -122,4 +102,27 @@ OKRManagementSystemUserStoryTest >> testStopManagingObjective [
 
 	self okrManagementSystem stopManagingObjective: objective.
 	self assert: self okrManagementSystem objectives isEmpty
+]
+
+{ #category : #' testing - objectives' }
+OKRManagementSystemUserStoryTest >> testUpdateObjective [
+	| objective keyResult |
+	objective := Objective
+		describedBy: 'An Objective'
+		withKeyResults: #().
+	self okrManagementSystem startManagingObjective: objective.
+	self
+		withTheOnlyOneIn: self okrManagementSystem objectives
+		do: [ :foundObjective | self assert: objective equals: foundObjective ].
+	self
+		assert: (self okrManagementSystem keyResultsfor: objective) isEmpty.
+	keyResult := KeyResult
+		describedBy: 'do something'
+		weighted: 20 percent.
+
+	self okrManagementSystem updateObjective: objective with: (Objective describedBy: 'An Objective' withKeyResults: {keyResult}).
+	
+	self
+		withTheOnlyOneIn: (self okrManagementSystem keyResultsfor: objective)
+		do: [ :foundKeyResult | self assert: keyResult equals: foundKeyResult ]
 ]

@@ -2,7 +2,8 @@ Class {
 	#name : #ObjectiveRESTfulController,
 	#superclass : #ResourceRESTfulController,
 	#instVars : [
-		'okrManagementSystem'
+		'okrManagementSystem',
+		'keyResultsController'
 	],
 	#category : #'OKR-Model-API'
 }
@@ -41,7 +42,7 @@ ObjectiveRESTfulController >> deleteObjectiveBasedOn: anHttpRequest within: aCon
 ]
 
 { #category : #'private - accessing' }
-ObjectiveRESTfulController >> entityTagOf: anObjective encodedAs: mediaType [
+ObjectiveRESTfulController >> entityTagOf: anObjective encodedAs: mediaType within: aContext [
 
 	^ ZnETag with: ( MD5 hashMessage: anObjective printString ) hex
 ]
@@ -77,10 +78,11 @@ ObjectiveRESTfulController >> getObjectivesBasedOn: aTeaRequest within: aContext
 ObjectiveRESTfulController >> initializeWithin: anOkrManagementSystem [ 
 	
 	okrManagementSystem := anOkrManagementSystem.
+	keyResultsController := KeyResultsRESTfulController within: self
 ]
 
 { #category : #'private - accessing' }
-ObjectiveRESTfulController >> locationOf: anObjective [
+ObjectiveRESTfulController >> locationOf: anObjective within: aContext [
 
 	| baseUrl |
 
@@ -105,6 +107,12 @@ ObjectiveRESTfulController >> provideHypermediaPolicy [
 ObjectiveRESTfulController >> providePaginationPolicy [
 
 	^ RESTfulControllerDoNotPaginateCollectionsPolicy for: self
+]
+
+{ #category : #'private - accessing' }
+ObjectiveRESTfulController >> provideResourceCreationPolicy [
+
+	^ RESTfulControllerRespondCreatedEntityPolicy for: self
 ]
 
 { #category : #specification }

@@ -15,7 +15,9 @@ ObjectiveRESTfulControllerSpecification >> addJsonObjectiveVersion1dot0dot0Decod
 
 			raw := NeoJSONObject fromString: json.
 
-			Objective describedBy: raw description withKeyResults: ( self parseKeyResultsFrom: raw keyResults)
+			Objective
+				describedBy: raw description
+				withKeyResults: ( self parseKeyResultsFrom: raw keyResults )
 			]
 ]
 
@@ -29,6 +31,7 @@ ObjectiveRESTfulControllerSpecification >> addJsonObjectiveVersion1dot0dot0Mappi
 			String
 				streamContents: [ :stream | 
 					( NeoJSONWriter on: stream )
+						for: KeyResult do: [ :mapping | mapping mapAccessors: #(#description #weight) ];
 						for: Objective
 							do: [ :mapping | 
 							mapping
@@ -50,6 +53,7 @@ ObjectiveRESTfulControllerSpecification >> addJsonObjectivesVersion1dot0dot0Mapp
 			String
 				streamContents: [ :stream | 
 					( NeoJSONWriter on: stream )
+						for: KeyResult do: [ :mapping | mapping mapAccessors: #(#description #weight) ];
 						for: Objective
 							do: [ :mapping | 
 							mapping
@@ -128,16 +132,22 @@ ObjectiveRESTfulControllerSpecification >> objectivesMappingKey [
 ]
 
 { #category : #encoding }
-ObjectiveRESTfulControllerSpecification >> parseKeyResultsFrom: aCollection [ 
-	
-		^ aCollection
+ObjectiveRESTfulControllerSpecification >> parseKeyResultsFrom: aCollection [
+
+	^ aCollection
+		collect: [ :json | 
+			| raw |
+
+			raw := NeoJSONObject fromString: json.
+			KeyResult describedBy: raw description weighted: ( raw weight * 100 ) asInteger percent
+			]
 ]
 
 { #category : #routes }
 ObjectiveRESTfulControllerSpecification >> updateObjectiveRoute [
 
 	^ RouteSpecification
-		handling: #PUT
+		handling: #PATCH
 		at: self objectiveTemplate
 		evaluating: [ :service :httpRequest :context | service updateObjectiveBasedOn: httpRequest within: context ]
 ]

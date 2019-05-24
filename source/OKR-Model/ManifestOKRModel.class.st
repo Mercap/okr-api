@@ -18,5 +18,5 @@ ManifestOKRModel class >> initialize [
 		registerInterfaceAt: #OKRManagementSystem
 			named: 'System to manage objectives and key results' 
 			declaring:
-			#(#objectiveIdentifiedBy:ifFound:ifNone: #objectives #startManagingObjectives: #stopManagingObjectives: #startManagingKeyResult:for: #keyResultsfor:)
+			#(#objectiveIdentifiedBy:ifFound:ifNone: #objectives #startManagingObjectives: #stopManagingObjectives: #updateObjective:with: #keyResultsfor:)
 ]
