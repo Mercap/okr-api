@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'periodManagementSystem'
 	],
-	#category : #'OKR-Tests-Controllers'
+	#category : #'OKR-Tests-API'
 }
 
 { #category : #'private - support' }

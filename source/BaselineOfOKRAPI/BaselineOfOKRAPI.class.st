@@ -23,7 +23,8 @@ BaselineOfOKRAPI >> baseline: spec [
 BaselineOfOKRAPI >> baselineOKRAPI: spec [
 
 	spec
-		package: 'OKR-Model' with: [ spec requires: #('Chalten' 'Kepler-Core' 'Stargate-Core') ];
+		package: 'OKR-Model'
+			with: [ spec requires: #('Chalten' 'Kepler-Core' 'Stargate-Core' 'ApplicationStarter') ];
 		group: 'Deployment' with: 'OKR-Model'.
 	spec
 		package: 'OKR-Tests' with: [ spec requires: #('OKR-Model' 'Kepler-SUnit' 'Stargate-SUnit') ];
@@ -33,6 +34,9 @@ BaselineOfOKRAPI >> baselineOKRAPI: spec [
 { #category : #initialization }
 BaselineOfOKRAPI >> setUpDependencies: spec [
 
+	spec
+		baseline: 'ApplicationStarter'
+		with: [ spec repository: 'github://ba-st/ApplicationStarter:v1/source' ].
 	spec
 		baseline: 'Kepler' with: [ spec repository: 'github://ba-st/Kepler:v4/source' ];
 		project: 'Kepler-Core' copyFrom: 'Kepler' with: [ spec loads: 'Core' ];
