@@ -31,7 +31,7 @@ PeriodRESTfulController >> deletePeriodBasedOn: anHttpRequest within: aContext [
 
 	| uuid |
 
-	uuid := UUID fromString: ( anHttpRequest uri segments at: 2 ).
+	uuid :=  anHttpRequest at: #identifier.
 	self periodManagementSystem
 		periodIdentifiedBy: uuid
 		ifFound: [ :period | self periodManagementSystem stopManagingPeriod: period ]
@@ -52,7 +52,7 @@ PeriodRESTfulController >> getPeriodBasedOn: anHttpRequest within: aContext [
 	^ self
 		get: [ | uuid |
 
-			uuid := UUID fromString: ( anHttpRequest at: #identifier ).
+			uuid := anHttpRequest at: #identifier.
 			self periodManagementSystem
 				periodIdentifiedBy: uuid
 				ifFound: #yourself
@@ -125,7 +125,7 @@ PeriodRESTfulController >> updatePeriodBasedOn: anHttpRequest within: aContext [
 	^ self
 		withCreatedResourceDo: [ :anUpdatedPeriod | 
 			self periodManagementSystem
-				periodIdentifiedBy: ( UUID fromString: ( anHttpRequest uri segments at: 2 ) )
+				periodIdentifiedBy: ( anHttpRequest at: #identifier )
 				ifFound: [ :oldPeriod | oldPeriod synchronizeWith: anUpdatedPeriod ]
 				ifNone: [ ObjectNotFound signal ]
 			]

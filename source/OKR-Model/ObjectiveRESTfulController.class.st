@@ -32,7 +32,7 @@ ObjectiveRESTfulController >> deleteObjectiveBasedOn: anHttpRequest within: aCon
 
 	| uuid |
 
-	uuid := UUID fromString: ( anHttpRequest uri segments at: 2 ).
+	uuid :=  anHttpRequest at: #identifier.
 	self okrManagementSystem
 		objectiveIdentifiedBy: uuid
 		ifFound: [ :anObjective | self okrManagementSystem stopManagingObjective: anObjective ]
@@ -54,7 +54,7 @@ ObjectiveRESTfulController >> getObjectiveBasedOn: anHttpRequest within: aContex
 	^ self
 		get: [ | uuid |
 
-			uuid := UUID fromString: ( anHttpRequest at: #identifier ).
+			uuid := anHttpRequest at: #identifier.
 			self okrManagementSystem
 				objectiveIdentifiedBy: uuid
 				ifFound: #yourself
@@ -128,7 +128,7 @@ ObjectiveRESTfulController >> updateObjectiveBasedOn: anHttpRequest within: aCon
 	^ self
 		withCreatedResourceDo: [ :anUpdatedObjective | 
 			self okrManagementSystem
-				objectiveIdentifiedBy: ( UUID fromString: ( anHttpRequest uri segments at: 2 ) )
+				objectiveIdentifiedBy: ( anHttpRequest at: #identifier)
 				ifFound: [ :oldObjective | oldObjective synchronizeWith: anUpdatedObjective ]
 				ifNone: [ ObjectNotFound signal ]
 			]
