@@ -32,9 +32,14 @@ PeriodRESTfulControllerTest >> requestToCreatePeriodFrom: aJSON [
 ]
 
 { #category : #'private - support' }
-PeriodRESTfulControllerTest >> requestToDeletePeriod: aPeriodLocation [
+PeriodRESTfulControllerTest >> requestToDeletePeriod: aPeriod [
 
-	^ TeaRequest fromZnRequest: ( ZnRequest delete: aPeriodLocation )
+	^ TeaRequest
+		fromZnRequest: ( ZnRequest delete: ( self urlOf: aPeriod ) )
+		pathParams:
+			( Dictionary new
+				at: #identifier put: aPeriod uuid;
+				yourself )
 ]
 
 { #category : #'private - accessing' }
@@ -54,14 +59,17 @@ PeriodRESTfulControllerTest >> requestToGetPeriodsAccepting: anAcceptHeader [
 ]
 
 { #category : #'private - support' }
-PeriodRESTfulControllerTest >> requestToUpdatePeriod: aPeriodLocation with: anUpdatePeriod [
-	
+PeriodRESTfulControllerTest >> requestToUpdatePeriod: aPeriod with: anUpdatePeriod [
+
 	^ TeaRequest
 		fromZnRequest:
-			((ZnRequest put: aPeriodLocation)
-				entity: (ZnEntity with: anUpdatePeriod type: self defaultPeriodMediaType );
-				yourself)
-        
+			( ( ZnRequest put: ( self urlOf: aPeriod ) )
+				entity: ( ZnEntity with: anUpdatePeriod type: self defaultPeriodMediaType );
+				yourself )
+		pathParams:
+			( Dictionary new
+				at: #identifier put: aPeriod uuid;
+				yourself )
 ]
 
 { #category : #running }
@@ -110,7 +118,7 @@ PeriodRESTfulControllerTest >> testDeletePeriod [
 	self assert: periodManagementSystem periods size equals: 1.
 	
 	updateResponse := resourceController
-		deletePeriodBasedOn: ( self requestToDeletePeriod: creationResponse location )
+		deletePeriodBasedOn: ( self requestToDeletePeriod: periodManagementSystem periods first)
 		within: self newHttpRequestContext.
 
 	self
@@ -136,7 +144,7 @@ PeriodRESTfulControllerTest >> testGetAfterCreatePeriod [
 
 			response := resourceController
 				getPeriodBasedOn:
-					( self requestToGetResourceIdentifiedBy: period uuid asString accepting: self defaultPeriodMediaType )
+					( self requestToGetResourceIdentifiedBy: period uuid accepting: self defaultPeriodMediaType )
 				within: self newHttpRequestContext.
 			self
 				withJsonFromContentsIn: response
@@ -221,10 +229,10 @@ PeriodRESTfulControllerTest >> testRoutes [
 { #category : #tests }
 PeriodRESTfulControllerTest >> testUpdatePeriod [
 
-	| creationResponse updateResponse |
+	| updateResponse |
 
 	self assert: periodManagementSystem periods isEmpty.
-	creationResponse := resourceController
+	resourceController
 		createPeriodBasedOn:
 			( self
 				requestToCreatePeriodFrom: '{"name":"2018Q4","startDate":"2018-10-01","endDate":"2018-12-31"}' )
@@ -233,7 +241,7 @@ PeriodRESTfulControllerTest >> testUpdatePeriod [
 	updateResponse := resourceController
 		updatePeriodBasedOn:
 			( self
-				requestToUpdatePeriod: creationResponse location
+				requestToUpdatePeriod: periodManagementSystem periods first
 				with: '{"name":"2019Q1","startDate":"2019-01-01", "endDate":"2019-01-15"}' )
 		within: self newHttpRequestContext.
 

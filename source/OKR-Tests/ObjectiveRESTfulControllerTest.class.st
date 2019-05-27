@@ -79,9 +79,14 @@ ObjectiveRESTfulControllerTest >> registerObjective: anObjective [
 ]
 
 { #category : #'private - support' }
-ObjectiveRESTfulControllerTest >> requestToDeleteObjective: anObjectiveLocation [
+ObjectiveRESTfulControllerTest >> requestToDeleteObjective: anObjectiveToDelete [
 
-	^ TeaRequest fromZnRequest: ( ZnRequest delete: anObjectiveLocation )
+	^ TeaRequest
+		fromZnRequest: ( ZnRequest delete: ( self urlOf: anObjectiveToDelete ) )
+		pathParams:
+			( Dictionary new
+				at: #identifier put: anObjectiveToDelete uuid;
+				yourself )
 ]
 
 { #category : #'private - support' }
@@ -99,8 +104,12 @@ ObjectiveRESTfulControllerTest >> requestToUpdateObjective: anObjectiveLocation 
 
 	^ TeaRequest
 		fromZnRequest:
-			( ( ZnRequest put: anObjectiveLocation )
+			( ( ZnRequest put: ( self urlOf: anObjectiveLocation ) )
 				entity: ( ZnEntity with: anUpdateObjective type: self defaultObjectiveMediaType );
+				yourself )
+		pathParams:
+			( Dictionary new
+				at: #identifier put: anObjectiveLocation uuid;
 				yourself )
 ]
 
@@ -134,14 +143,14 @@ ObjectiveRESTfulControllerTest >> testCreateEmptyObjective [
 { #category : #tests }
 ObjectiveRESTfulControllerTest >> testDeleteObjective [
 
-	| creationResponse updateResponse |
+	|  updateResponse |
 
 	self assert: okrManagementSystem objectives isEmpty.
-	creationResponse := self createObjectiveBasedOn: self emptyObjectiveJson.
+	self createObjectiveBasedOn: self emptyObjectiveJson.
 	self assert: okrManagementSystem objectives size equals: 1.
 
 	updateResponse := resourceController
-		deleteObjectiveBasedOn: ( self requestToDeleteObjective: creationResponse location )
+		deleteObjectiveBasedOn: ( self requestToDeleteObjective: okrManagementSystem objectives first )
 		within: self newHttpRequestContext.
 
 	self
@@ -160,7 +169,7 @@ ObjectiveRESTfulControllerTest >> testGetAfterCreateObjective [
 		do: [ :objective | 
 			| response |
 
-			response := self getObjectiveIdentifiedAs: objective uuid asString.
+			response := self getObjectiveIdentifiedAs: objective uuid.
 			self
 				withJsonFromContentsIn: response
 				do: [ :json | 
@@ -253,7 +262,7 @@ ObjectiveRESTfulControllerTest >> testUpdateObjectiveDescription [
 	updateResponse := resourceController
 		updateObjectiveBasedOn:
 			( self
-				requestToUpdateObjective: creationResponse location
+				requestToUpdateObjective: okrManagementSystem objectives first
 				with: '{"description":"Second one","keyResults":[]}' )
 		within: self newHttpRequestContext.
 	self
@@ -284,7 +293,7 @@ ObjectiveRESTfulControllerTest >> testUpdateObjectiveKeyResults [
 			].
 	updateResponse := resourceController
 		updateObjectiveBasedOn:
-			( self requestToUpdateObjective: creationResponse location with: self objectiveWithOneKeyResultJson )
+			( self requestToUpdateObjective: okrManagementSystem objectives first with: self objectiveWithOneKeyResultJson )
 		within: self newHttpRequestContext.
 	self
 		assert: updateResponse isCreated;
