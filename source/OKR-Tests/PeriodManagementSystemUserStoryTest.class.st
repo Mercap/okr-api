@@ -1,12 +1,12 @@
 Class {
 	#name : #PeriodManagementSystemUserStoryTest,
 	#superclass : #SystemBasedUserStoryTest,
-	#category : #'OKR-Tests-Core'
+	#category : #'OKR-Tests-UserStory'
 }
 
 { #category : #accessing }
 PeriodManagementSystemUserStoryTest >> periodManagementSystem [
-	
+
 	^ rootSystem >> #PeriodManagementSystem
 ]
 

@@ -9,23 +9,22 @@ Class {
 
 { #category : #installing }
 PeriodManagementSystem >> dependencies [
-	
+
 	^ #()
 ]
 
 { #category : #installing }
 PeriodManagementSystem >> implementedInterfaces [
-	
+
 	^ #(#PeriodManagementSystem)
 ]
 
 { #category : #initialization }
 PeriodManagementSystem >> initialize [
 
-	super initialize. 
-		
-	periods := OrderedCollection new. 
+	super initialize.
 
+	periods := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -42,18 +41,18 @@ PeriodManagementSystem >> periodIdentifiedBy: anUUID ifFound: aBlock ifNone: aNo
 
 { #category : #querying }
 PeriodManagementSystem >> periods [
-	
+
 	^ periods
 ]
 
 { #category : #managing }
-PeriodManagementSystem >> startManagingPeriod: aPeriod [ 
-	
+PeriodManagementSystem >> startManagingPeriod: aPeriod [
+
 	periods add: aPeriod
 ]
 
 { #category : #managing }
-PeriodManagementSystem >> stopManagingPeriod: aPeriod [ 
-	
-	periods remove: aPeriod 
+PeriodManagementSystem >> stopManagingPeriod: aPeriod [
+
+	periods remove: aPeriod
 ]

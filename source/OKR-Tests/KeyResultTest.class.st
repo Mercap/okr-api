@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #tests }
+KeyResultTest >> testComparing [
+
+	| kr kr2 |
+
+	kr := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
+	kr2 := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
+	self assert: kr equals: kr2.
+	self assert: ( Set with: kr with: kr2 ) size equals: 1
+]
+
+{ #category : #tests }
 KeyResultTest >> testCreation [
 
 	| kr |
@@ -16,16 +27,6 @@ KeyResultTest >> testCreation [
 	self
 		assert: kr description equals: 'Implementar modelo de Key Result';
 		assert: kr weight equals: 20 percent
-]
-
-{ #category : #tests }
-KeyResultTest >> testUUIDTrait [
-
-	| kr |
-
-	kr := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
-
-	self assert: ( kr uuid isA: UUID )
 ]
 
 { #category : #tests }

@@ -119,7 +119,7 @@ PeriodRESTfulControllerSpecification >> periodMappingKey [
 
 { #category : #routes }
 PeriodRESTfulControllerSpecification >> periodTemplate [
-	
+
 	^ '<1s>/%<<2s>:IsUUID>' expandMacrosWith: self endpoint with: #identifier
 ]
 
@@ -139,7 +139,7 @@ PeriodRESTfulControllerSpecification >> periodsMappingKey [
 PeriodRESTfulControllerSpecification >> updatePeriodRoute [
 
 	^ RouteSpecification
-		handling: #PUT
+		handling: #PATCH
 		at: self periodTemplate
 		evaluating: [ :service :httpRequest :context | service updatePeriodBasedOn: httpRequest within: context ]
 ]

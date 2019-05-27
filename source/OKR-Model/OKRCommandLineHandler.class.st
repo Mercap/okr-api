@@ -43,6 +43,10 @@ OKRCommandLineHandler >> controllers [
 
 	^ OrderedCollection new
 		add: ( PeriodRESTfulController within: rootSystem >> #PeriodManagementSystem );
+		add: ( ObjectiveRESTfulController within: rootSystem >> #OKRManagementSystem );
+		add:
+			( KeyResultsRESTfulController
+				within: ( ObjectiveRESTfulController within: rootSystem >> #OKRManagementSystem ) );
 		asArray
 ]
 
@@ -57,7 +61,7 @@ OKRCommandLineHandler >> rootSystem [
 
 	^ CompositeSystem new
 		register: PeriodManagementSystem new;
-		register: KeyResultManagementSystem new;
+		register: OKRManagementSystem new;
 		yourself
 ]
 

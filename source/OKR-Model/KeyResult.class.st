@@ -1,8 +1,6 @@
 Class {
 	#name : #KeyResult,
 	#superclass : #Object,
-	#traits : 'IdentifiableObject',
-	#classTraits : 'IdentifiableObject classTrait',
 	#instVars : [
 		'description',
 		'weight'
@@ -22,10 +20,23 @@ KeyResult class >> describedBy: aDescription weighted: aPercentage [
 	^ self new initializeDescribedBy: aDescription weighted: aPercentage
 ]
 
-{ #category : #Accessing }
+{ #category : #comparing }
+KeyResult >> = anotherKeyResult [
+
+	^ description = anotherKeyResult description
+		and: [ weight = anotherKeyResult weight ]
+]
+
+{ #category : #accessing }
 KeyResult >> description [
 
 	^ description
+]
+
+{ #category : #comparing }
+KeyResult >> hash [
+
+	^ description hash bitXor: weight hash
 ]
 
 { #category : #Initialization }
