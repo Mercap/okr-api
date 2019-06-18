@@ -2,7 +2,7 @@ Class {
 	#name : #OKRManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'objectivesByUUID'
+		'repository'
 	],
 	#category : #'OKR-Model-Core'
 }
@@ -23,13 +23,16 @@ OKRManagementSystem >> implementedInterfaces [
 OKRManagementSystem >> initialize [
 
 	super initialize.
-	objectivesByUUID := Dictionary new
+	self setupInMemoryRepository
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> keyResultsfor: anObjective [
 
-	^ objectivesByUUID at: anObjective uuid ifPresent: [ :objective | objective keyResults ]
+	^ repository
+		withOneMatching: [ :objective | objective uuid = anObjective uuid ]
+		do: [ :objective | objective keyResults ]
+		else: [ ObjectNotFound signal ]
 ]
 
 { #category : #accessing }
@@ -41,29 +44,37 @@ OKRManagementSystem >> name [
 { #category : #'objective management' }
 OKRManagementSystem >> objectiveIdentifiedBy: anUUID ifFound: aBlock ifNone: aNoneBlock [
 
-	^ objectivesByUUID at: anUUID ifPresent: aBlock ifAbsent: aNoneBlock
+	^ repository withOneMatching: [ :objective | objective uuid = anUUID ] do: aBlock else: aNoneBlock
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> objectives [
 
-	^ objectivesByUUID values
+	^ repository findAll
+]
+
+{ #category : #initialization }
+OKRManagementSystem >> setupInMemoryRepository [
+
+	repository := InMemoryRepository
+		checkingConflictsAccordingTo: ( CriteriaBasedConflictCheckingStrategy forSingleAspectMatching: [ :objective | objective uuid ] )
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> startManagingObjective: anObjective [
 
-	objectivesByUUID at: anObjective uuid put: anObjective
+	repository store: anObjective
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> stopManagingObjective: anObjective [
 
-	objectivesByUUID removeKey: anObjective uuid
+	repository purge: anObjective
 ]
 
 { #category : #'objective management' }
 OKRManagementSystem >> updateObjective: anObjective with: aNewObjective [
 
-	objectivesByUUID at: anObjective uuid put: ( anObjective synchronizeWith: aNewObjective )
+	repository update: anObjective with: aNewObjective.
+	
 ]
