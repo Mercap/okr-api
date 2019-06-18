@@ -30,6 +30,10 @@ KeyResultTest >> testComparingNotEqualKeyResults [
 	kr := KeyResult describedBy: 'OTRO' weighted: 10 percent.
 	kr2 := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 10 percent.
 	self deny: kr equals: kr2.
+	
+	kr := KeyResult describedBy: 'OTRO' weighted: 10 percent.
+	kr2 := KeyResult describedBy: 'Implementar modelo de Key Result' weighted: 20 percent.
+	self deny: kr equals: kr2.
 
 ]
 
