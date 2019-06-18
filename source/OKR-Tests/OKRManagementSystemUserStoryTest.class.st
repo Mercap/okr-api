@@ -23,6 +23,17 @@ OKRManagementSystemUserStoryTest >> testEmptySystem [
 ]
 
 { #category : #' testing - objectives' }
+OKRManagementSystemUserStoryTest >> testKeyResultsForObjectiveNotManagedShouldRaiseError [
+
+	| objective keyResult |
+
+	objective := Objective describedBy: 'An Objective' withKeyResults: #().
+	
+	self should: [self okrManagementSystem keyResultsfor: objective ] raise: ObjectNotFound
+	
+]
+
+{ #category : #' testing - objectives' }
 OKRManagementSystemUserStoryTest >> testObjectiveIdentifiedBy [
 
 	| q1 q2 found |
