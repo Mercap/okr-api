@@ -69,6 +69,24 @@ PeriodManagementSystemUserStoryTest >> testStartManagingPeriod [
 ]
 
 { #category : #'private - running' }
+PeriodManagementSystemUserStoryTest >> testStartManagingPeriodRaiseErrorForSamePeriod [
+
+	| period |
+
+	period := Period named: '2019Q1' from: March first , 2019 to: ( May , 2019 ) lastDate.
+
+	self periodManagementSystem startManagingPeriod: period.
+
+	self
+		withTheOnlyOneIn: self periodManagementSystem periods
+		do: [ :foundPeriod | self assert: period equals: foundPeriod ].
+
+	self
+		should: [ self periodManagementSystem startManagingPeriod: period ]
+		raise: ConflictingObjectFound
+]
+
+{ #category : #'private - running' }
 PeriodManagementSystemUserStoryTest >> testStopManagingPeriod [
 
 	| period |
@@ -83,4 +101,14 @@ PeriodManagementSystemUserStoryTest >> testStopManagingPeriod [
 		
 	self periodManagementSystem stopManagingPeriod: period. 
 	self assert: self periodManagementSystem periods isEmpty
+]
+
+{ #category : #'private - running' }
+PeriodManagementSystemUserStoryTest >> testStopManagingPeriodRaiseErrorWhenNotPresent [
+
+	| period |
+
+	period := Period named: '2019Q1' from: March first , 2019 to: ( May , 2019 ) lastDate.
+
+	self should: [ self periodManagementSystem stopManagingPeriod: period ] raise: ObjectNotFound
 ]

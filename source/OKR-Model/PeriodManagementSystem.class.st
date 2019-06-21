@@ -2,7 +2,7 @@ Class {
 	#name : #PeriodManagementSystem,
 	#superclass : #SubsystemImplementation,
 	#instVars : [
-		'periods'
+		'repository'
 	],
 	#category : #'OKR-Model-Core'
 }
@@ -23,8 +23,8 @@ PeriodManagementSystem >> implementedInterfaces [
 PeriodManagementSystem >> initialize [
 
 	super initialize.
+	self setupInMemoryRepository.
 
-	periods := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -36,23 +36,30 @@ PeriodManagementSystem >> name [
 { #category : #querying }
 PeriodManagementSystem >> periodIdentifiedBy: anUUID ifFound: aBlock ifNone: aNoneBlock [
 
-	^ periods detect: [ :period | period uuid = anUUID ] ifFound: aBlock ifNone: aNoneBlock
+	^ repository withOneMatching: [ :period | period uuid = anUUID ] do: aBlock else: aNoneBlock
 ]
 
 { #category : #querying }
 PeriodManagementSystem >> periods [
 
-	^ periods
+	^ repository findAll
+]
+
+{ #category : #initialization }
+PeriodManagementSystem >> setupInMemoryRepository [
+
+	repository := InMemoryRepository
+		checkingConflictsAccordingTo: ( CriteriaBasedConflictCheckingStrategy forSingleAspectMatching: [ :period | period uuid ] )
 ]
 
 { #category : #managing }
 PeriodManagementSystem >> startManagingPeriod: aPeriod [
 
-	periods add: aPeriod
+	repository store: aPeriod
 ]
 
 { #category : #managing }
 PeriodManagementSystem >> stopManagingPeriod: aPeriod [
 
-	periods remove: aPeriod
+	repository purge: aPeriod
 ]

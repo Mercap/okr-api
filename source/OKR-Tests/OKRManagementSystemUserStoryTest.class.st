@@ -23,6 +23,17 @@ OKRManagementSystemUserStoryTest >> testEmptySystem [
 ]
 
 { #category : #' testing - objectives' }
+OKRManagementSystemUserStoryTest >> testKeyResultsForObjectiveNotManagedShouldRaiseError [
+
+	| objective keyResult |
+
+	objective := Objective describedBy: 'An Objective' withKeyResults: #().
+	
+	self should: [self okrManagementSystem keyResultsfor: objective ] raise: ObjectNotFound
+	
+]
+
+{ #category : #' testing - objectives' }
 OKRManagementSystemUserStoryTest >> testObjectiveIdentifiedBy [
 
 	| q1 q2 found |
@@ -68,6 +79,24 @@ OKRManagementSystemUserStoryTest >> testStartManagingObjective [
 		do: [ :foundObjective | self assert: objective equals: foundObjective ]
 ]
 
+{ #category : #' testing - objectives' }
+OKRManagementSystemUserStoryTest >> testStartManagingObjectiveRaiseErrorForSameObjective [
+
+	| objective |
+
+	objective := Objective describedBy: 'An Objective' withKeyResults: #().
+
+	self okrManagementSystem startManagingObjective: objective.
+
+	self
+		withTheOnlyOneIn: self okrManagementSystem objectives
+		do: [ :foundObjective | self assert: objective equals: foundObjective ].
+
+	self
+		should: [ self okrManagementSystem startManagingObjective: objective ]
+		raise: ConflictingObjectFound
+]
+
 { #category : #'testing - key results' }
 OKRManagementSystemUserStoryTest >> testStartManagingObjectiveWithKeyResult [
 
@@ -102,6 +131,16 @@ OKRManagementSystemUserStoryTest >> testStopManagingObjective [
 
 	self okrManagementSystem stopManagingObjective: objective.
 	self assert: self okrManagementSystem objectives isEmpty
+]
+
+{ #category : #' testing - objectives' }
+OKRManagementSystemUserStoryTest >> testStopManagingObjectiveRaiseErrorWhenNotPresent [
+
+	| objective |
+
+	objective := Objective describedBy: 'An Objective' withKeyResults: #().
+
+	self should: [ self okrManagementSystem stopManagingObjective: objective ] raise: ObjectNotFound
 ]
 
 { #category : #' testing - objectives' }
